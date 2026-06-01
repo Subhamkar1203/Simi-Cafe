@@ -4,7 +4,7 @@ import { useEffect, useState, FormEvent } from "react";
 import { PlusLg, PencilSquare, Trash, XLg } from "react-bootstrap-icons";
 import { Pagination } from "@/components/pagination";
 import { toaster } from "@/components/toaster";
-
+import Image from "next/image";
 interface MenuItem {
   id: number;
   category_id: number;
@@ -123,7 +123,7 @@ export default function MenuPage() {
     if (selectedFile) {
       const formData = new FormData();
       formData.append("file", selectedFile);
-      
+
       try {
         const uploadRes = await fetch("/api/upload", {
           method: "POST",
@@ -211,7 +211,7 @@ export default function MenuPage() {
         } else if (errorData.error) {
           errorMessage = errorData.error;
         }
-      } catch {}
+      } catch { }
       toaster.create({ title: "Validation Error", description: errorMessage, type: "error" });
     }
   };
@@ -375,9 +375,9 @@ export default function MenuPage() {
                       <option key={c.id} value={c.id}>{c.name}</option>
                     ))}
                   </select>
-                  <button 
-                    type="button" 
-                    className="btn btn-outline" 
+                  <button
+                    type="button"
+                    className="btn btn-outline"
                     style={{ padding: "0 0.5rem" }}
                     onClick={handleCreateCategory}
                     title="Create New Category"
@@ -402,8 +402,13 @@ export default function MenuPage() {
                 <label>Image</label>
                 {form.image_url && !selectedFile && (
                   <div style={{ marginBottom: "0.5rem" }}>
-                    <img src={form.image_url} alt="Current" style={{ width: 60, height: 60, objectFit: "cover", borderRadius: "0.375rem" }} />
-                    <div style={{ fontSize: "0.75rem", color: "var(--admin-text-muted)" }}>Current Image</div>
+                    <Image
+                      src={form.image_url}
+                      alt="Current"
+                      width={60}
+                      height={60}
+                      style={{ objectFit: "cover", borderRadius: "0.375rem" }}
+                    /><div style={{ fontSize: "0.75rem", color: "var(--admin-text-muted)" }}>Current Image</div>
                   </div>
                 )}
                 <input
@@ -427,9 +432,9 @@ export default function MenuPage() {
                         <option key={d.id} value={d.id}>{d.name}</option>
                       ))}
                     </select>
-                    <button 
-                      type="button" 
-                      className="btn btn-outline" 
+                    <button
+                      type="button"
+                      className="btn btn-outline"
                       style={{ padding: "0 0.5rem" }}
                       onClick={handleCreateDietType}
                       title="Create New Diet Type"
@@ -478,9 +483,9 @@ export default function MenuPage() {
                       {tag.name}
                     </label>
                   ))}
-                  <button 
-                    type="button" 
-                    className="btn btn-outline" 
+                  <button
+                    type="button"
+                    className="btn btn-outline"
                     style={{ padding: "0 0.5rem", height: "28px" }}
                     onClick={handleCreateTag}
                     title="Create New Tag"
@@ -536,7 +541,16 @@ export default function MenuPage() {
                 <tr key={item.id}>
                   <td data-label="Name" style={{ fontWeight: 500, display: "flex", alignItems: "center", gap: "0.75rem" }}>
                     {item.image_url ? (
-                      <img src={item.image_url} alt={item.name} style={{ width: 40, height: 40, borderRadius: "0.375rem", objectFit: "cover" }} />
+                      <Image
+                        src={item.image_url}
+                        alt={item.name}
+                        width={40}
+                        height={40}
+                        style={{
+                          borderRadius: "0.375rem",
+                          objectFit: "cover",
+                        }}
+                      />
                     ) : (
                       <div style={{ width: 40, height: 40, borderRadius: "0.375rem", background: "#f3f4f6", display: "flex", alignItems: "center", justifyContent: "center", color: "#9ca3af", fontSize: "0.7rem" }}>No Img</div>
                     )}
@@ -579,10 +593,10 @@ export default function MenuPage() {
             )}
           </tbody>
         </table>
-        <Pagination 
-          currentPage={currentPage} 
-          totalPages={totalPages} 
-          onPageChange={setCurrentPage} 
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={setCurrentPage}
         />
       </div>
     </main>

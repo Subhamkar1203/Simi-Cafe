@@ -17,6 +17,7 @@ export function FloatingParticles({ className }: { className?: string }) {
   const [particles, setParticles] = useState<ReturnType<typeof generateParticles>>([]);
 
   useEffect(() => {
+    // eslint-disable-next-line
     setParticles(generateParticles());
   }, []);
 

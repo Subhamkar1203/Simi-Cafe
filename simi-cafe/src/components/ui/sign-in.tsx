@@ -38,6 +38,7 @@ interface SignInPageProps {
   title?: React.ReactNode;
   description?: React.ReactNode;
   initialMode?: AuthMode;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initialReservations?: any[];
 }
 
@@ -152,19 +153,28 @@ export const SignInPage: React.FC<SignInPageProps> = ({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [activeTab, setActiveTab] = useState<"profile" | "reservations" | "orders" | "favorites">("profile");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [orders, setOrders] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [favorites, setFavorites] = useState<any[]>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [reservations, setReservations] = useState<any[]>(initialReservations);
 
   useEffect(() => {
     if (user && activeTab === "orders") {
-      fetch("/api/orders").then(res => res.json()).then(data => setOrders(data.orders || []));
+      fetch("/api/orders")
+        .then(res => res.json())
+        .then(data => setOrders(data.orders || []));
     } else if (user && activeTab === "favorites") {
-      fetch("/api/user/favorites").then(res => res.json()).then(data => setFavorites(data.favorites || []));
+      fetch("/api/user/favorites")
+        .then(res => res.json())
+        .then(data => setFavorites(data.favorites || []));
     } else if (user && activeTab === "reservations" && reservations.length === 0) {
-      fetch("/api/reservations/user").then(res => res.json()).then(data => setReservations(data.reservations || []));
+      fetch("/api/reservations/user")
+        .then(res => res.json())
+        .then(data => setReservations(data.reservations || []));
     }
-  }, [user, activeTab]);
+  }, [user, activeTab, reservations.length]);
 
   const { addItem } = useCart();
 
@@ -199,7 +209,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
         const data = await res.json();
         toaster.create({ title: "Upload Failed", description: data.error || "Failed to upload image.", type: "error" });
       }
-    } catch (error) {
+    } catch {
       toaster.create({ title: "Error", description: "Network error during upload.", type: "error" });
     } finally {
       setIsUploadingAvatar(false);
@@ -310,7 +320,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
     if (!result.ok) {
       if (result.error === "Validation Error" && result.details) {
         const nextErrors: FormErrors = {};
-        result.details.forEach((d: any) => {
+        result.details.forEach((d: { path: string; message: string }) => {
           let field = d.path.split(".").pop();
           if (field === "name") field = "fullName";
           if (field) nextErrors[field] = d.message;
@@ -395,7 +405,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
     if (!result.ok) {
       if (result.error === "Validation Error" && result.details) {
         const nextErrors: FormErrors = {};
-        result.details.forEach((d: any) => {
+        result.details.forEach((d: { path: string; message: string }) => {
           const field = d.path.split(".").pop();
           if (field) nextErrors[field] = d.message;
         });
@@ -561,24 +571,24 @@ export const SignInPage: React.FC<SignInPageProps> = ({
             {(() => {
               const upcoming = reservations.filter(r => !["cancelled", "completed", "rejected"].includes(r.status))
                 .sort((a, b) => new Date(`${a.reservation_date} ${a.reservation_time}`).getTime() - new Date(`${b.reservation_date} ${b.reservation_time}`).getTime())[0];
-              
+
               if (!upcoming) return null;
-              
+
               return (
                 <div className="relative mt-8 overflow-hidden rounded-[2rem] border border-[rgb(var(--border-soft)_/_0.6)] bg-[rgb(var(--surface-muted)_/_0.4)] p-8 shadow-sm backdrop-blur-md">
-                   <div className="absolute right-0 top-0 -mr-4 -mt-4 text-[rgb(var(--forest)_/_0.06)]">
-                     <CalendarRange className="size-40" />
-                   </div>
-                   <div className="relative z-10">
-                     <p className="text-xs font-bold uppercase tracking-widest text-[rgb(var(--forest))] mb-1">Upcoming Visit</p>
-                     <h3 className="font-serif text-3xl font-bold leading-tight">Table for {upcoming.guests}</h3>
-                     <p className="mt-2 text-[17px] font-medium text-[rgb(var(--foreground)_/_0.85)]">
-                       {new Date(upcoming.reservation_date).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })} at {upcoming.reservation_time}
-                     </p>
-                     <Button size="sm" variant="secondary" className="mt-6 rounded-xl shadow-sm" onClick={() => setActiveTab('reservations')}>
-                       Manage Reservation
-                     </Button>
-                   </div>
+                  <div className="absolute right-0 top-0 -mr-4 -mt-4 text-[rgb(var(--forest)_/_0.06)]">
+                    <CalendarRange className="size-40" />
+                  </div>
+                  <div className="relative z-10">
+                    <p className="text-xs font-bold uppercase tracking-widest text-[rgb(var(--forest))] mb-1">Upcoming Visit</p>
+                    <h3 className="font-serif text-3xl font-bold leading-tight">Table for {upcoming.guests}</h3>
+                    <p className="mt-2 text-[17px] font-medium text-[rgb(var(--foreground)_/_0.85)]">
+                      {new Date(upcoming.reservation_date).toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })} at {upcoming.reservation_time}
+                    </p>
+                    <Button size="sm" variant="secondary" className="mt-6 rounded-xl shadow-sm" onClick={() => setActiveTab('reservations')}>
+                      Manage Reservation
+                    </Button>
+                  </div>
                 </div>
               )
             })()}
@@ -608,14 +618,14 @@ export const SignInPage: React.FC<SignInPageProps> = ({
             <h2 className="mb-6 text-2xl font-bold font-serif flex items-center gap-2">
               <CalendarRange className="size-6 text-[rgb(var(--forest))]" /> Your Reservations
             </h2>
-            
+
             {reservations.length === 0 ? (
               <div className="relative overflow-hidden rounded-[2.5rem] p-10 text-center shadow-xl site-card border border-[rgb(var(--border-soft))]">
                 <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/dlupquidc/image/upload/f_auto,q_auto,c_fill,w_800/simi-cafe/static/totoro_field')] bg-cover bg-center opacity-20 blur-[4px] pointer-events-none mix-blend-luminosity" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface-raised)] to-transparent opacity-80 pointer-events-none" />
                 <Sparkles className="relative z-10 size-12 text-[rgb(var(--accent))] mb-5 opacity-80" />
                 <h3 className="relative z-10 font-serif text-3xl font-bold text-[rgb(var(--foreground))] mb-2">Awaiting your visit</h3>
-                <p className="relative z-10 text-[15px] text-[rgb(var(--foreground)_/_0.6)] mb-8 max-w-sm">You haven't made any reservations yet. Secure a table for your magical café moment.</p>
+                <p className="relative z-10 text-[15px] text-[rgb(var(--foreground)_/_0.6)] mb-8 max-w-sm">You haven&apos;t made any reservations yet. Secure a table for your magical café moment.</p>
                 <Button className="relative z-10 shadow-xl rounded-full h-12 px-8 font-bold bg-[rgb(var(--accent))] text-[rgb(var(--accent-foreground))] hover:bg-[rgb(var(--accent)_/_0.9)] hover:-translate-y-0.5 transition-all" onClick={() => window.location.href = '/reserve'}>
                   <CalendarRange className="mr-2 size-4" /> Reserve a Table
                 </Button>
@@ -624,7 +634,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
               <div className="grid gap-6">
                 {reservations.map((reservation) => {
                   const isError = ['cancelled', 'rejected'].includes(reservation.status);
-                  
+
                   const getStep = () => {
                     if (isError) return -1;
                     if (reservation.status === 'pending') return 1;
@@ -632,26 +642,26 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                     if (reservation.status === 'completed') return 3;
                     return 0;
                   };
-                  
+
                   const step = getStep();
                   const canCancel = ["pending", "confirmed", "approved"].includes(reservation.status);
 
                   return (
                     <div key={reservation.id} className="relative overflow-hidden rounded-[2rem] border border-[rgb(var(--border-soft)_/_0.8)] bg-[rgb(var(--surface-raised)_/_0.6)] p-6 sm:p-8 shadow-sm backdrop-blur-xl transition hover:shadow-md hover:border-[rgb(var(--accent)_/_0.3)] group">
-                      
+
                       {/* Timeline Header */}
                       <div className="mb-8">
                         <div className="flex items-center justify-between mb-4">
                           <span className="font-serif text-2xl font-bold">Table for {reservation.guests}</span>
                           <span className="text-sm font-bold text-[rgb(var(--foreground)_/_0.5)]">#{reservation.id}</span>
                         </div>
-                        
+
                         {/* Visual Progress Bar */}
                         <div className="relative flex items-center justify-between mt-6">
                           <div className="absolute left-0 top-1/2 h-0.5 w-full -translate-y-1/2 bg-[rgb(var(--border-soft))] rounded-full overflow-hidden">
                             {!isError && (
-                              <div 
-                                className="h-full bg-[rgb(var(--accent))] transition-all duration-1000 ease-out" 
+                              <div
+                                className="h-full bg-[rgb(var(--accent))] transition-all duration-1000 ease-out"
                                 style={{ width: step === 1 ? '15%' : step === 2 ? '50%' : '100%' }}
                               />
                             )}
@@ -659,7 +669,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                               <div className="h-full w-full bg-red-500/40" />
                             )}
                           </div>
-                          
+
                           {/* Step 1 */}
                           <div className="relative flex flex-col items-center gap-2 z-10 bg-[rgb(var(--surface-raised))] px-2">
                             <div className={cn("flex size-7 items-center justify-center rounded-full border-2 text-xs font-bold transition-colors", step >= 1 && !isError ? "border-[rgb(var(--accent))] bg-[rgb(var(--accent))] text-[rgb(var(--accent-foreground))]" : "border-[rgb(var(--border-soft))] bg-[rgb(var(--surface-muted))] text-muted-foreground", isError && "border-red-500/50 bg-red-500/10 text-red-500")}>
@@ -667,7 +677,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                             </div>
                             <span className={cn("text-[10px] font-bold uppercase tracking-wider", step >= 1 && !isError ? "text-[rgb(var(--accent))]" : "text-[rgb(var(--foreground)_/_0.4)]", isError && "text-red-500")}>Requested</span>
                           </div>
-                          
+
                           {/* Step 2 */}
                           <div className="relative flex flex-col items-center gap-2 z-10 bg-[rgb(var(--surface-raised))] px-2">
                             <div className={cn("flex size-7 items-center justify-center rounded-full border-2 text-xs font-bold transition-colors", step >= 2 && !isError ? "border-[rgb(var(--accent))] bg-[rgb(var(--accent))] text-[rgb(var(--accent-foreground))]" : "border-[rgb(var(--border-soft))] bg-[rgb(var(--surface-muted))] text-muted-foreground", isError && "opacity-50")}>
@@ -675,7 +685,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                             </div>
                             <span className={cn("text-[10px] font-bold uppercase tracking-wider", step >= 2 && !isError ? "text-[rgb(var(--accent))]" : "text-[rgb(var(--foreground)_/_0.4)]", isError && "opacity-50")}>Confirmed</span>
                           </div>
-                          
+
                           {/* Step 3 */}
                           <div className="relative flex flex-col items-center gap-2 z-10 bg-[rgb(var(--surface-raised))] px-2">
                             <div className={cn("flex size-7 items-center justify-center rounded-full border-2 text-xs font-bold transition-colors", step === 3 && !isError ? "border-[rgb(var(--accent))] bg-[rgb(var(--accent))] text-[rgb(var(--accent-foreground))]" : "border-[rgb(var(--border-soft))] bg-[rgb(var(--surface-muted))] text-muted-foreground", isError && "opacity-50")}>
@@ -700,12 +710,12 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                             <p className="font-medium">{reservation.reservation_time}</p>
                           </div>
                         </div>
-                        
+
                         <div className="flex flex-col sm:items-end justify-center">
                           {canCancel && (
-                            <Button 
-                              variant="ghost" 
-                              size="sm" 
+                            <Button
+                              variant="ghost"
+                              size="sm"
                               onClick={() => cancelReservation(reservation.id)}
                               className="text-red-500 hover:text-red-600 hover:bg-red-500/10 font-semibold"
                             >
@@ -713,18 +723,18 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                             </Button>
                           )}
                           {!canCancel && reservation.status !== 'completed' && (
-                             <Button 
-                               variant="secondary" 
-                               size="sm" 
-                               onClick={() => window.location.href = '/reserve'}
-                               className="rounded-full"
-                             >
-                               Rebook
-                             </Button>
+                            <Button
+                              variant="secondary"
+                              size="sm"
+                              onClick={() => window.location.href = '/reserve'}
+                              className="rounded-full"
+                            >
+                              Rebook
+                            </Button>
                           )}
                         </div>
                       </div>
-                      
+
                       {reservation.special_requests && (
                         <div className="mt-5 p-4 rounded-2xl bg-[rgb(var(--surface)_/_0.5)] text-sm italic border border-current/5 shadow-inner">
                           <span className="font-bold not-italic block mb-1 text-xs uppercase tracking-wider text-[rgb(var(--foreground)_/_0.5)]">Special Requests</span>
@@ -742,7 +752,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
         {activeTab === "orders" && (
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 space-y-8">
             <div>
-              <h2 className="mb-4 text-xl font-bold font-serif flex items-center gap-2"><ShoppingBag className="size-5"/> Active Orders</h2>
+              <h2 className="mb-4 text-xl font-bold font-serif flex items-center gap-2"><ShoppingBag className="size-5" /> Active Orders</h2>
               {activeOrders.length === 0 ? (
                 <p className="text-muted-foreground italic">No active orders right now.</p>
               ) : (
@@ -755,7 +765,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                       </div>
                       <p className="text-sm site-muted mb-2">{new Date(order.created_at).toLocaleString()}</p>
                       <ul className="text-sm">
-                        {order.items?.map((item: any) => (
+                        {order.items?.map((item: { id: number; quantity: number; name: string; price: number }) => (
                           <li key={item.id} className="flex justify-between">
                             <span>{item.quantity}x {item.name}</span>
                             <span>₹{item.price * item.quantity}</span>
@@ -773,7 +783,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
             </div>
 
             <div>
-              <h2 className="mb-4 text-xl font-bold font-serif flex items-center gap-2"><History className="size-5"/> Order History</h2>
+              <h2 className="mb-4 text-xl font-bold font-serif flex items-center gap-2"><History className="size-5" /> Order History</h2>
               {pastOrders.length === 0 ? (
                 <p className="text-muted-foreground italic">No past orders.</p>
               ) : (
@@ -786,7 +796,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                       </div>
                       <p className="text-sm site-muted">{new Date(order.created_at).toLocaleDateString()}</p>
                       <div className="mt-2 text-sm">
-                        {order.items?.map((i: any) => i.name).join(", ")}
+                        {order.items?.map((i: { name: string }) => i.name).join(", ")}
                       </div>
                     </div>
                   ))}
@@ -801,7 +811,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
             <h2 className="mb-6 text-2xl font-bold font-serif flex items-center gap-2">
               <Heart className="size-6 text-red-500 fill-red-500" /> Saved Favorites
             </h2>
-            
+
             {favorites.length === 0 ? (
               <div className="relative overflow-hidden rounded-[2.5rem] p-8 shadow-xl site-card border border-[rgb(var(--border-soft))] flex flex-col items-center text-center">
                 <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/dlupquidc/image/upload/f_auto,q_auto,c_fill,w_800/simi-cafe/static/spirited_away_flowers')] bg-cover bg-center opacity-30 blur-[2px] pointer-events-none" />
@@ -833,7 +843,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                             loader={cloudinaryLoader}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                          <button 
+                          <button
                             onClick={() => removeFavorite(item.id)}
                             className="absolute right-3 top-3 rounded-full bg-white/20 p-2 text-white backdrop-blur-md transition hover:bg-red-500/80 hover:text-white"
                             aria-label="Remove from favorites"
@@ -848,17 +858,17 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                               <h3 className="text-xl font-bold leading-tight">{item.name}</h3>
                               <p className="text-lg font-bold site-price shrink-0">₹{item.price}</p>
                             </div>
-                            
+
                             <span className="inline-flex items-center gap-1.5 rounded-full bg-[rgb(var(--surface-muted)_/_0.9)] px-2.5 py-1 text-[10px] font-bold shadow-sm uppercase tracking-wider mb-3">
                               <Leaf className={`size-3 ${item.is_vegan ? "text-green-600" : item.is_veg ? "text-green-500" : "text-red-400"}`} />
                               {itemDiet}
                             </span>
-                            
+
                             <p className="text-sm leading-relaxed site-muted line-clamp-3">{item.description}</p>
                           </div>
 
                           <div className="mt-4 pt-4 border-t border-[rgb(var(--border-soft))] flex justify-end">
-                            <Button 
+                            <Button
                               onClick={() => addItem({
                                 menu_item_id: item.id,
                                 name: item.name,
@@ -907,7 +917,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
               className={cn(
                 "flex h-11 flex-1 items-center justify-center gap-2 rounded-full text-sm font-bold site-muted",
                 active &&
-                  "bg-[rgb(var(--accent))] text-[rgb(var(--accent-foreground))] shadow-sm",
+                "bg-[rgb(var(--accent))] text-[rgb(var(--accent-foreground))] shadow-sm",
               )}
             >
               <Icon className="size-4" />
@@ -931,15 +941,15 @@ export const SignInPage: React.FC<SignInPageProps> = ({
             <PasswordToggle shown={showConfirmPassword} onClick={() => setShowConfirmPassword((current) => !current)} label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"} />
           </AuthInput>
           <div className="flex items-start gap-3 mt-4">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               id="agreePolicy"
-              checked={agreePolicy} 
+              checked={agreePolicy}
               onChange={(e) => {
                 setAgreePolicy(e.target.checked);
                 setErrors((cur) => ({ ...cur, policy: "" }));
-              }} 
-              className="mt-1 size-4 shrink-0 rounded border-[rgb(var(--border-soft))] accent-[rgb(var(--forest))]" 
+              }}
+              className="mt-1 size-4 shrink-0 rounded border-[rgb(var(--border-soft))] accent-[rgb(var(--forest))]"
             />
             <div className="flex-1">
               <label htmlFor="agreePolicy" className="text-sm site-muted leading-relaxed cursor-pointer">

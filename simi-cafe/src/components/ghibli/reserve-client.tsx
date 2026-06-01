@@ -28,10 +28,11 @@ export function ReserveClient({ initialTimeSlots }: { initialTimeSlots: string[]
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-  const [confirmedReservation, setConfirmedReservation] = useState<any>(null);
+  const [confirmedReservation, setConfirmedReservation] = useState<{ date?: string; time?: string; guests?: number } | null>(null);
 
   useEffect(() => {
     if (user) {
+      // eslint-disable-next-line
       setForm((prev) => ({
         ...prev,
         name: user.name || prev.name,
@@ -50,7 +51,8 @@ export function ReserveClient({ initialTimeSlots }: { initialTimeSlots: string[]
        setSelectedTime(dateTime.time);
        
        const [time, modifier] = dateTime.time.split(" ");
-       let [hours, minutes] = time.split(":");
+       const [hoursStr, minutes] = time.split(":");
+       let hours = hoursStr;
        if (hours === "12") hours = "00";
        if (modifier === "PM") hours = (parseInt(hours, 10) + 12).toString();
        
@@ -110,7 +112,7 @@ export function ReserveClient({ initialTimeSlots }: { initialTimeSlots: string[]
       setStatus("success");
       
       // Reset form but don't redirect, user will click the button in success state
-    } catch (err) {
+    } catch {
       setStatus("error");
       toaster.create({
         title: "Network Error",
@@ -186,7 +188,7 @@ export function ReserveClient({ initialTimeSlots }: { initialTimeSlots: string[]
               className="max-w-xl"
               eyebrow={<><Sparkles className="size-4 text-[rgb(var(--accent))]" /> Reserve / Visit</>}
               title="Secure your table for a warm, magical afternoon."
-              description={<span className="hidden md:block">Experience our luxury Ghibli-inspired ambience. Choose your preferred time, and we'll have your table ready. Walk-ins are always welcome when seats are available.</span>}
+              description={<span className="hidden md:block">Experience our luxury Ghibli-inspired ambience. Choose your preferred time, and we&apos;ll have your table ready. Walk-ins are always welcome when seats are available.</span>}
             >
               
               <div className="mt-10 rounded-[2.5rem] border border-[rgb(var(--border-soft))] bg-[rgb(var(--surface)_/_0.85)] p-8 shadow-md backdrop-blur-3xl sm:p-10">

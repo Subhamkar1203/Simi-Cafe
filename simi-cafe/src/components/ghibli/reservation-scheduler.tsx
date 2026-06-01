@@ -57,8 +57,11 @@ export const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({
 }) => {
   const [currentDate, setCurrentDate] = useState(initialDate);
   
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const today = useMemo(() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return d;
+  }, []);
   
   const tomorrow = new Date(today);
   tomorrow.setDate(today.getDate() + 1);
@@ -123,8 +126,8 @@ export const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({
     timeSlots.forEach((time) => {
       const [start] = time.split(" - ");
       const [timeStr, modifier] = start.split(" ");
-      let [hours, minutes] = timeStr.split(":");
-      let h = parseInt(hours, 10);
+      const [hoursStr, minutes] = timeStr.split(":");
+      let h = parseInt(hoursStr, 10);
       if (h === 12) h = 0;
       if (modifier === "PM") h += 12;
 

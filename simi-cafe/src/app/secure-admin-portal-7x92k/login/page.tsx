@@ -39,7 +39,8 @@ export default function AdminLoginPage() {
       }
 
       router.push("/secure-admin-portal-7x92k/orders");
-    } catch (err: any) {
+    } catch (err) {
+      console.error(err);
       setError("An unexpected error occurred.");
     } finally {
       setLoading(false);
@@ -68,7 +69,8 @@ export default function AdminLoginPage() {
         // In this demo, we'll auto-switch to reset for easy testing since we don't have email setup
         setTimeout(() => setMode("reset"), 2000);
       }
-    } catch (err: any) {
+    } catch (err) {
+      console.error(err);
       setError("An unexpected error occurred.");
     } finally {
       setLoading(false);
@@ -96,7 +98,8 @@ export default function AdminLoginPage() {
         setMessage("Password reset successful. You can now login.");
         setTimeout(() => setMode("login"), 2000);
       }
-    } catch (err: any) {
+    } catch (err) {
+      console.error(err);
       setError("An unexpected error occurred.");
     } finally {
       setLoading(false);

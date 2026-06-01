@@ -12,6 +12,7 @@ import { AuthProvider } from "@/lib/auth-context";
 import { CartProvider } from "@/lib/cart-context";
 import { FloatingParticles } from "@/components/ghibli/floating-particles";
 import { FloatingSticker } from "@/components/ghibli/floating-sticker";
+import cloudinaryLoader from "@/lib/cloudinary-loader";
 
 import "./globals.css";
 
@@ -84,7 +85,7 @@ export default function RootLayout({
     priority: true,
     sizes: "(max-width: 768px) 100vw, 50vw",
     quality: 90 as const,
-    loader: require("@/lib/cloudinary-loader").default,
+    loader: cloudinaryLoader,
   };
 
   const {
@@ -128,6 +129,7 @@ export default function RootLayout({
 
                   <img
                     {...rest}
+                    alt="Background overlay"
                     className="object-cover object-center saturate-105 brightness-105 dark:saturate-[0.88] dark:brightness-[0.7] transition-all duration-700 w-full h-full absolute inset-0"
                   />
                 </picture>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useId } from "react";
+import React, { useMemo } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { Home, Coffee, CalendarDays, Receipt, ShoppingCart, UserRound } from "lucide-react";
@@ -24,7 +24,6 @@ export function Navbar() {
   const pathname = usePathname();
   const { items: cartItems, setIsCartOpen } = useCart();
   const cartItemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
-  const filterId = useId().replace(/:/g, "");
 
   const activeIndex = useMemo(() => {
     const index = simiItems.findIndex(item => {

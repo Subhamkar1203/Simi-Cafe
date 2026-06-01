@@ -71,8 +71,8 @@ export default function CheckoutPage() {
 
       clearCart();
       router.push("/orders?orderSuccess=true");
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
       setIsSubmitting(false);
     }
   };

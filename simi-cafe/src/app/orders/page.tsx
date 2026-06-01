@@ -9,31 +9,26 @@ import { Clock, CheckCircle, ChefHat, XCircle, RefreshCw, FileText } from "lucid
 import { Button } from "@/components/ui/button";
 import { HeroContentCard } from "@/components/ui/hero-content-card";
 
+interface UserOrder {
+  id: number;
+  status: string;
+  created_at: string;
+  total_amount: number;
+  rejection_reason?: string;
+  order_type?: string;
+  scheduled_time?: string;
+  payment_mode?: string;
+  delivery_address?: string;
+  items: { id: number; name: string; quantity: number; price: number; image_url?: string }[];
+}
+
 export default function OrdersPage() {
   const { user } = useAuth();
   const router = useRouter();
   const { addItem, setIsCartOpen } = useCart();
-  
-  const [orders, setOrders] = useState<any[]>([]);
+
+  const [orders, setOrders] = useState<UserOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  // Polling for live updates
-  useEffect(() => {
-    if (user === null) {
-      router.push("/account/login?redirect=/orders");
-      return;
-    }
-
-    if (!user) return;
-
-    fetchOrders();
-
-    const interval = setInterval(() => {
-      fetchOrders(false);
-    }, 5000); // Poll every 5 seconds
-
-    return () => clearInterval(interval);
-  }, [user, router]);
 
   const fetchOrders = async (showLoading = true) => {
     if (showLoading) setIsLoading(true);
@@ -49,6 +44,24 @@ export default function OrdersPage() {
       if (showLoading) setIsLoading(false);
     }
   };
+
+  // Polling for live updates
+  useEffect(() => {
+    if (user === null) {
+      router.push("/account/login?redirect=/orders");
+      return;
+    }
+
+    if (!user) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchOrders();
+
+    const interval = setInterval(() => {
+      fetchOrders(false);
+    }, 5000); // Poll every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [user, router]);
 
   const handleCancel = async (orderId: number) => {
     if (!confirm("Are you sure you want to cancel this order?")) return;
@@ -78,7 +91,7 @@ export default function OrdersPage() {
       });
       if (res.ok) {
         const data = await res.json();
-        data.items.forEach((item: any) => {
+        data.items.forEach((item: { menu_item_id: number; name: string; price: string | number; quantity: number; image_url: string }) => {
           addItem({
             menu_item_id: item.menu_item_id,
             name: item.name,
@@ -136,7 +149,7 @@ export default function OrdersPage() {
         {orders.length === 0 ? (
           <div className="rounded-3xl border bg-[rgb(var(--surface-raised)_/_0.5)] p-10 text-center shadow-sm">
             <h2 className="text-xl font-bold">No orders found</h2>
-            <p className="mt-2 text-muted-foreground">You haven't placed any orders yet.</p>
+            <p className="mt-2 text-muted-foreground">You haven&apos;t placed any orders yet.</p>
             <Button className="mt-6" onClick={() => router.push("/menu")}>Browse Menu</Button>
           </div>
         ) : (
@@ -144,7 +157,7 @@ export default function OrdersPage() {
             {orders.map(order => {
               const statusDisplay = getStatusDisplay(order.status);
               const StatusIcon = statusDisplay.icon;
-              
+
               return (
                 <div key={order.id} className="rounded-3xl border border-[rgb(var(--border-soft))] bg-[rgb(var(--surface-raised)_/_0.6)] p-6 shadow-sm transition hover:shadow-md">
                   <div className="flex flex-col gap-4 border-b border-[rgb(var(--border-soft))] pb-4 sm:flex-row sm:items-center sm:justify-between">
@@ -152,7 +165,7 @@ export default function OrdersPage() {
                       <h2 className="text-lg font-bold">Order #{order.id}</h2>
                       <p className="text-sm text-muted-foreground">{new Date(order.created_at).toLocaleString()}</p>
                     </div>
-                    
+
                     <div className={`flex w-fit items-center gap-2 rounded-full px-4 py-2 text-sm font-bold ${statusDisplay.bg} ${statusDisplay.color}`}>
                       <StatusIcon className="size-4" />
                       {statusDisplay.label}
@@ -162,15 +175,15 @@ export default function OrdersPage() {
                   <div className="mt-4 grid gap-6 md:grid-cols-2">
                     <div>
                       <ul className="flex flex-col gap-3">
-                        {order.items?.map((item: any) => (
+                        {order.items?.map(item => (
                           <li key={item.id} className="flex items-center gap-3">
                             <div className="relative size-12 shrink-0">
-                              <Image 
-                                src={item.image_url || "/images/placeholder.jpg"} 
-                                alt="" 
+                              <Image
+                                src={item.image_url || "/images/placeholder.jpg"}
+                                alt=""
                                 fill
                                 sizes="48px"
-                                className={`rounded-lg object-cover ${!item.image_url ? 'opacity-75 mix-blend-luminosity saturate-50' : ''}`} 
+                                className={`rounded-lg object-cover ${!item.image_url ? 'opacity-75 mix-blend-luminosity saturate-50' : ''}`}
                               />
                             </div>
                             <div className="flex-1 min-w-0">

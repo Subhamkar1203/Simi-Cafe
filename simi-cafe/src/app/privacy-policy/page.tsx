@@ -1,6 +1,5 @@
 import { Metadata } from "next";
-import { Shield, Leaf, Heart, Mail, Lock, Clock, Eye, Server, UserCheck, Settings } from "lucide-react";
-import { motion } from "framer-motion";
+import { Shield, Heart, Mail, Clock, UserCheck, Settings } from "lucide-react";
 import { HeroContentCard } from "@/components/ui/hero-content-card";
 
 export const metadata: Metadata = {
@@ -195,7 +194,7 @@ export default function PrivacyPolicyPage() {
               <span className="flex size-10 items-center justify-center rounded-full bg-[rgb(var(--accent)_/_0.15)] text-[rgb(var(--accent-foreground))]">
                 8
               </span>
-              Children's Privacy
+              Children&apos;s Privacy
             </h2>
             <div className="ml-13 space-y-4 text-base leading-relaxed site-muted">
               <p>
@@ -219,7 +218,7 @@ export default function PrivacyPolicyPage() {
             </h2>
             <div className="ml-13 space-y-4 text-base leading-relaxed site-muted">
               <p>
-                We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the "Last Updated" date at the top of this Privacy Policy.
+                We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page and updating the &quot;Last Updated&quot; date at the top of this Privacy Policy.
               </p>
               <p>
                 You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.

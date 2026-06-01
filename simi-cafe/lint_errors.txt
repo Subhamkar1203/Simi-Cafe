@@ -1,0 +1,218 @@
+﻿
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\app\checkout\page.tsx
+  74:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\app\layout.tsx
+   87:13  error    A `require()` style import is forbidden                                                                    @typescript-eslint/no-require-imports
+  129:19  warning  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\app\orders\page.tsx
+   17:40  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+   29:5   error  Error: Cannot access variable before it is declared
+
+`fetchOrders` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\app\orders\page.tsx:29:5
+  27 |     if (!user) return;
+  28 |
+> 29 |     fetchOrders();
+     |     ^^^^^^^^^^^ `fetchOrders` accessed before it is declared
+  30 |
+  31 |     const interval = setInterval(() => {
+  32 |       fetchOrders(false);
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\app\orders\page.tsx:38:3
+  36 |   }, [user, router]);
+  37 |
+> 38 |   const fetchOrders = async (showLoading = true) => {
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 39 |     if (showLoading) setIsLoading(true);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 40 |     try {
+     ΓÇª
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 50 |     }
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 51 |   };
+     | ^^^^^ `fetchOrders` is declared here
+  52 |
+  53 |   const handleCancel = async (orderId: number) => {
+  54 |     if (!confirm("Are you sure you want to cancel this order?")) return;  react-hooks/immutability
+   81:35  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+  139:64  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     react/no-unescaped-entities
+  165:50  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            @typescript-eslint/no-explicit-any
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\app\our-story\page.tsx
+  3:10  warning  'ImageLayer' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\app\privacy-policy\page.tsx
+    2:18   warning  'Leaf' is defined but never used                                 @typescript-eslint/no-unused-vars
+    2:37   warning  'Lock' is defined but never used                                 @typescript-eslint/no-unused-vars
+    2:50   warning  'Eye' is defined but never used                                  @typescript-eslint/no-unused-vars
+    2:55   warning  'Server' is defined but never used                               @typescript-eslint/no-unused-vars
+    3:10   warning  'motion' is defined but never used                               @typescript-eslint/no-unused-vars
+  198:23   error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+  222:167  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  222:180  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\app\reserve\page.tsx
+  33:12  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\app\secure-admin-portal-7x92k\login\page.tsx
+  42:14  warning  'err' is defined but never used           @typescript-eslint/no-unused-vars
+  42:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  71:14  warning  'err' is defined but never used           @typescript-eslint/no-unused-vars
+  71:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  99:14  warning  'err' is defined but never used           @typescript-eslint/no-unused-vars
+  99:19  error    Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\app\secure-admin-portal-7x92k\orders\page.tsx
+    9:40  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-explicit-any
+   15:36  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-explicit-any
+   18:5   error    Error: Cannot access variable before it is declared
+
+`fetchOrders` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\app\secure-admin-portal-7x92k\orders\page.tsx:18:5
+  16 |
+  17 |   useEffect(() => {
+> 18 |     fetchOrders();
+     |     ^^^^^^^^^^^ `fetchOrders` accessed before it is declared
+  19 |
+  20 |     const interval = setInterval(() => {
+  21 |       fetchOrders(false);
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\app\secure-admin-portal-7x92k\orders\page.tsx:27:3
+  25 |   }, []);
+  26 |
+> 27 |   const fetchOrders = async (showLoading = true) => {
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 28 |     try {
+     | ^^^^^^^^^
+> 29 |       const res = await fetch("/api/admin/orders");
+     ΓÇª
+     | ^^^^^^^^^
+> 58 |     }
+     | ^^^^^^^^^
+> 59 |   };
+     | ^^^^^ `fetchOrders` is declared here
+  60 |
+  61 |   const showNotification = (msg: string) => {
+  62 |     setNotification(msg);  react-hooks/immutability
+   25:6   warning  React Hook useEffect has a missing dependency: 'fetchOrders'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    react-hooks/exhaustive-deps
+   40:58  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-explicit-any
+   42:54  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-explicit-any
+   48:20  warning  'e' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-unused-vars
+   54:19  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-explicit-any
+   87:35  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-explicit-any
+  117:34  error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          @typescript-eslint/no-explicit-any
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\components\ghibli\floating-particles.tsx
+  20:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\components\ghibli\floating-particles.tsx:20:5
+  18 |
+  19 |   useEffect(() => {
+> 20 |     setParticles(generateParticles());
+     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  21 |   }, []);
+  22 |
+  23 |   return (  react-hooks/set-state-in-effect
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\components\ghibli\floating-sticker.tsx
+   5:10  warning  'cn' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+  11:5   error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\components\ghibli\floating-sticker.tsx:11:5
+   9 |
+  10 |   useEffect(() => {
+> 11 |     setMounted(true);
+     |     ^^^^^^^^^^ Avoid calling setState() directly within an effect
+  12 |   }, []);
+  13 |
+  14 |   if (!mounted) return null;  react-hooks/set-state-in-effect
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\components\ghibli\menu-client.tsx
+   30:22  error    Component definition is missing display name                                                                                                                                                                                       react/display-name
+   39:12  error    Unexpected any. Specify a different type                                                                                                                                                                                           @typescript-eslint/no-explicit-any
+  136:68  error    Unexpected any. Specify a different type                                                                                                                                                                                           @typescript-eslint/no-explicit-any
+  147:9   warning  The 'items' logical expression could make the dependencies of useMemo Hook (at line 208) change on every render. Move it inside the useMemo callback. Alternatively, wrap the initialization of 'items' in its own useMemo() Hook  react-hooks/exhaustive-deps
+  194:9   error    'filtered' is never reassigned. Use 'const' instead                                                                                                                                                                                prefer-const
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\components\ghibli\navbar.tsx
+  27:9  warning  'filterId' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\components\ghibli\parallax-hero.tsx
+   5:34  warning  'BookOpen' is defined but never used  @typescript-eslint/no-unused-vars
+  10:10  warning  'cn' is defined but never used        @typescript-eslint/no-unused-vars
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\components\ghibli\reservation-scheduler.tsx
+   60:9   warning  The 'today' object construction makes the dependencies of useMemo Hook (at line 148) change on every render. To fix this, wrap the initialization of 'today' in its own useMemo() Hook                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            react-hooks/exhaustive-deps
+  126:12  error    'hours' is never reassigned. Use 'const' instead                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  prefer-const
+  126:19  error    'minutes' is never reassigned. Use 'const' instead                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                prefer-const
+  148:32  error    Compilation Skipped: Existing memoization could not be preserved
+
+React Compiler has skipped optimizing this component because the existing manual memoization could not be preserved. This dependency may be mutated later, which could cause the value to change unexpectedly.
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\components\ghibli\reservation-scheduler.tsx:148:32
+  146 |
+  147 |     return groups;
+> 148 |   }, [timeSlots, selectedDate, today]);
+      |                                ^^^^^ This dependency may be modified later
+  149 |
+  150 |   const groupIcons: Record<string, React.ReactNode> = {
+  151 |     "Morning": <Sunrise className="size-4" />,  react-hooks/preserve-manual-memoization
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\components\ghibli\reserve-client.tsx
+   31:68   error    Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-explicit-any
+   35:7    error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\components\ghibli\reserve-client.tsx:35:7
+  33 |   useEffect(() => {
+  34 |     if (user) {
+> 35 |       setForm((prev) => ({
+     |       ^^^^^^^ Avoid calling setState() directly within an effect
+  36 |         ...prev,
+  37 |         name: user.name || prev.name,
+  38 |         phone: user.phone || prev.phone,  react-hooks/set-state-in-effect
+   53:20   error    'minutes' is never reassigned. Use 'const' instead                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    prefer-const
+  113:14   warning  'err' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       @typescript-eslint/no-unused-vars
+  189:144  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       react/no-unescaped-entities
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\components\ui\cart-sidebar.tsx
+  61:104  error  `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`  react/no-unescaped-entities
+
+C:\Users\ASUS\OneDrive\Desktop\Simi cafe\simi-cafe\src\components\ui\sign-in.tsx
+   41:25   error    Unexpected any. Specify a different type                                                                                @typescript-eslint/no-explicit-any
+  155:40   error    Unexpected any. Specify a different type                                                                                @typescript-eslint/no-explicit-any
+  156:46   error    Unexpected any. Specify a different type                                                                                @typescript-eslint/no-explicit-any
+  157:52   error    Unexpected any. Specify a different type                                                                                @typescript-eslint/no-explicit-any
+  167:6    warning  React Hook useEffect has a missing dependency: 'reservations.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  202:14   warning  'error' is defined but never used                                                                                       @typescript-eslint/no-unused-vars
+  313:36   error    Unexpected any. Specify a different type                                                                                @typescript-eslint/no-explicit-any
+  398:36   error    Unexpected any. Specify a different type                                                                                @typescript-eslint/no-explicit-any
+  618:117  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                         react/no-unescaped-entities
+  758:50   error    Unexpected any. Specify a different type                                                                                @typescript-eslint/no-explicit-any
+  789:47   error    Unexpected any. Specify a different type                                                                                @typescript-eslint/no-explicit-any
+
+Γ£û 66 problems (44 errors, 22 warnings)
+  3 errors and 0 warnings potentially fixable with the `--fix` option.
+

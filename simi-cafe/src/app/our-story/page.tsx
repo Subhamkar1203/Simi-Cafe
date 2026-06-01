@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Sparkles } from "lucide-react";
-import { ImageLayer } from "@/components/ghibli/image-layer";
 import { ParallaxSection } from "@/components/ghibli/parallax-section";
 import { ScrollReveal } from "@/components/ghibli/scroll-reveal";
 import { HeroContentCard } from "@/components/ui/hero-content-card";

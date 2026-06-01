@@ -58,7 +58,7 @@ export function CartSidebar() {
                   <ShoppingBag className="size-8 text-[rgb(var(--forest))]" />
                 </div>
                 <p className="relative z-10 font-serif text-2xl font-bold">Your cart is empty.</p>
-                <p className="relative z-10 mt-1 text-sm font-semibold opacity-80">Looks like you haven't made your choice yet.</p>
+                <p className="relative z-10 mt-1 text-sm font-semibold opacity-80">Looks like you haven&apos;t made your choice yet.</p>
                 <Button 
                   onClick={() => {
                     setIsCartOpen(false);

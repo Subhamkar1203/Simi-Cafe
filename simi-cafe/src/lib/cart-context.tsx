@@ -44,7 +44,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cart: cartItems })
       });
-    } catch {
+    } catch (e) {
       console.error("Failed to sync cart to DB", e);
     }
   }, []);
@@ -77,7 +77,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               setItems(initialItems);
             }
           }
-        } catch {
+        } catch (e) {
           console.error("Failed to load cart from DB", e);
         }
       } else {
@@ -85,7 +85,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (savedCart) {
           try {
             setItems(JSON.parse(savedCart));
-          } catch {
+          } catch (e) {
             console.error("Failed to parse cart", e);
           }
         }

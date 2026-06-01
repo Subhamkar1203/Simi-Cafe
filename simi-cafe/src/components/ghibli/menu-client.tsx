@@ -36,7 +36,7 @@ const MenuItemCard = memo(({
   item: MenuItem; 
   isFav: boolean; 
   toggleFavorite: (id: number, isFav: boolean) => void;
-  addItem: any;
+  addItem: (item: { menu_item_id: number; name: string; price: number; quantity: number; image_url: string }) => void;
 }) => {
   const isAvail = Boolean(item.is_available);
   const itemDiet = item.diet_type_name || "Unknown";
@@ -133,7 +133,9 @@ const MenuItemCard = memo(({
   );
 });
 
-export function MenuClient({ initialMenuData }: { initialMenuData: any }) {
+MenuItemCard.displayName = "MenuItemCard";
+
+export function MenuClient({ initialMenuData }: { initialMenuData: { items: MenuItem[]; dietTypes?: string[] } }) {
   const router = useRouter();
   const { addItem } = useCart();
   const { user } = useAuth();
@@ -144,7 +146,7 @@ export function MenuClient({ initialMenuData }: { initialMenuData: any }) {
   const [sort, setSort] = useState("default");
   const [favorites, setFavorites] = useState<number[]>([]);
 
-  const items = initialMenuData?.items || [];
+  const items = useMemo(() => initialMenuData?.items || [], [initialMenuData]);
   const categories: string[] = initialMenuData?.items ? ["All", ...Array.from(new Set(initialMenuData.items.map((i: MenuItem) => i.category_name))) as string[]] : [];
   const dietTypes: string[] = initialMenuData?.dietTypes && initialMenuData.dietTypes.length > 0 ? ["All", ...initialMenuData.dietTypes] : ["All", "Veg", "Non-Veg", "Vegan"];
   
@@ -191,7 +193,7 @@ export function MenuClient({ initialMenuData }: { initialMenuData: any }) {
   }, [user, router]);
 
   const visibleItems = useMemo(() => {
-    let filtered = items.filter((item: MenuItem) => {
+    const filtered = items.filter((item: MenuItem) => {
       if (category !== "All" && item.category_name !== category) return false;
       if (diet !== "All" && item.diet_type_name !== diet) return false;
       if (search && !item.name.toLowerCase().includes(search.toLowerCase())) return false;

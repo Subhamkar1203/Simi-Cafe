@@ -30,7 +30,7 @@ export default async function ReservePage() {
         timeSlots = data.timeSlots;
       }
     }
-  } catch (error) {
+  } catch {
     console.error("Error fetching reservation availability, falling back to default slots.");
   }
 

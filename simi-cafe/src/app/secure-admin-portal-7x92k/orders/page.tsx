@@ -5,24 +5,26 @@ import { CheckCircle, XCircle, Clock, ChefHat, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
+interface AdminOrderItem { id: number; quantity: number; name: string; price: number; }
+interface AdminOrder {
+  id: number; status: string; created_at: string; total_amount: number; user_name: string;
+  user_phone: string; order_type: string; scheduled_time?: string; delivery_address?: string;
+  rejection_reason?: string; items?: AdminOrderItem[];
+}
+
 export default function AdminOrdersPage() {
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<AdminOrder[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [notification, setNotification] = useState("");
-  
+
   const router = useRouter();
-  const previousOrdersRef = useRef<any[]>([]);
+  const previousOrdersRef = useRef<AdminOrder[]>([]);
 
-  useEffect(() => {
-    fetchOrders();
-
-    const interval = setInterval(() => {
-      fetchOrders(false);
-    }, 5000); // Poll every 5 seconds
-
-    return () => clearInterval(interval);
-  }, []);
+  const showNotification = (msg: string) => {
+    setNotification(msg);
+    setTimeout(() => setNotification(""), 3000);
+  };
 
   const fetchOrders = async (showLoading = true) => {
     try {
@@ -32,36 +34,47 @@ export default function AdminOrdersPage() {
         return;
       }
       const data = await res.json();
-      const newOrdersData = data.orders || [];
-      
+      const newOrdersData: AdminOrder[] = data.orders || [];
+
       // Check for new orders if not initial load
       if (!showLoading && previousOrdersRef.current.length > 0) {
         const currentPendingIds = previousOrdersRef.current.filter(o => o.status === "pending").map(o => o.id);
-        const incomingPending = newOrdersData.filter((o: any) => o.status === "pending");
-        
-        const hasNewOrder = incomingPending.some((o: any) => !currentPendingIds.includes(o.id));
+        const incomingPending = newOrdersData.filter(o => o.status === "pending");
+
+        const hasNewOrder = incomingPending.some(o => !currentPendingIds.includes(o.id));
         if (hasNewOrder) {
           showNotification("New order received!");
           // Optional: play sound
           try {
-            new Audio('/notification.mp3').play().catch(() => {});
-          } catch (e) {}
+            new Audio('/notification.mp3').play().catch(() => { });
+          } catch {
+            // ignore
+          }
         }
       }
 
       setOrders(newOrdersData);
       previousOrdersRef.current = newOrdersData;
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : String(err));
     } finally {
       if (showLoading) setIsLoading(false);
     }
   };
+  useEffect(() => {
 
-  const showNotification = (msg: string) => {
-    setNotification(msg);
-    setTimeout(() => setNotification(""), 3000);
-  };
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    fetchOrders();
+
+    const interval = setInterval(() => {
+      fetchOrders(false);
+    }, 5000); // Poll every 5 seconds
+
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // fetchOrders moved up
 
   const updateOrderStatus = async (orderId: number, status: string, reason?: string) => {
     try {
@@ -84,7 +97,7 @@ export default function AdminOrdersPage() {
   const activeOrders = orders.filter(o => ["preparing", "ready"].includes(o.status));
   const pastOrders = orders.filter(o => ["completed", "cancelled"].includes(o.status));
 
-  const renderOrderCard = (order: any, isNew: boolean) => (
+  const renderOrderCard = (order: AdminOrder, isNew: boolean) => (
     <div key={order.id} className={`mb-4 rounded-xl border p-6 shadow-sm ${isNew ? 'bg-orange-50 border-orange-200' : 'bg-white'}`}>
       <div className="flex justify-between border-b pb-4 mb-4 border-gray-100">
         <div>
@@ -92,19 +105,18 @@ export default function AdminOrdersPage() {
           <p className="text-sm text-gray-500">{new Date(order.created_at).toLocaleString()}</p>
         </div>
         <div className="text-right">
-          <span className={`inline-block rounded-full px-3 py-1 text-sm font-bold uppercase ${
-            order.status === 'pending' ? 'bg-orange-100 text-orange-800' :
+          <span className={`inline-block rounded-full px-3 py-1 text-sm font-bold uppercase ${order.status === 'pending' ? 'bg-orange-100 text-orange-800' :
             order.status === 'preparing' ? 'bg-blue-100 text-blue-800' :
-            order.status === 'ready' ? 'bg-green-100 text-green-800' :
-            order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-            'bg-gray-100 text-gray-800'
-          }`}>
+              order.status === 'ready' ? 'bg-green-100 text-green-800' :
+                order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+                  'bg-gray-100 text-gray-800'
+            }`}>
             {order.status}
           </span>
           <p className="mt-1 font-bold text-lg">₹{order.total_amount}</p>
         </div>
       </div>
-      
+
       <div className="mb-4 text-sm bg-gray-50 p-3 rounded-lg">
         <p><strong>Customer:</strong> {order.user_name} ({order.user_phone})</p>
         <p><strong>Type:</strong> <span className="uppercase">{order.order_type}</span></p>
@@ -114,7 +126,7 @@ export default function AdminOrdersPage() {
       </div>
 
       <ul className="mb-6 space-y-2">
-        {order.items?.map((item: any) => (
+        {order.items?.map((item) => (
           <li key={item.id} className="flex justify-between border-b border-gray-100 pb-2 text-sm">
             <span><span className="font-bold">{item.quantity}x</span> {item.name}</span>
             <span>₹{item.price * item.quantity}</span>

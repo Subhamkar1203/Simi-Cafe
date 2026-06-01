@@ -2,12 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { CalendarDays, Utensils, BookOpen, ChevronDown, Sparkles } from "lucide-react";
+import { CalendarDays, Utensils, ChevronDown, Sparkles } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { FloatingParticles } from "./floating-particles";
-import { cn } from "@/lib/utils";
 
 export function ParallaxHero() {
   const heroRef = useRef<HTMLElement | null>(null);
