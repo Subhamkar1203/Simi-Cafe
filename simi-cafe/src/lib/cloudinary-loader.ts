@@ -10,7 +10,7 @@ export default function cloudinaryLoader({ src, width, quality }: { src: string;
   // Cloudinary transformations for performance and responsive width
   const params = [
     'f_auto',
-    'q_auto',
+    quality ? `q_${quality}` : 'q_auto',
     'dpr_auto',
     'c_fill',
     `w_${width}`

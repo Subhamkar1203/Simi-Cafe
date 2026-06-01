@@ -111,6 +111,25 @@ const ProfileField = ({ label, value }: { label: string; value: string }) => (
   </div>
 );
 
+const PasswordToggle = ({
+  shown,
+  onClick,
+  label,
+}: {
+  shown: boolean;
+  onClick: () => void;
+  label: string;
+}) => (
+  <button
+    type="button"
+    aria-label={label}
+    onClick={onClick}
+    className="absolute inset-y-0 right-3 grid place-items-center text-[rgb(var(--forest))]"
+  >
+    {shown ? <EyeOff className="size-5" /> : <Eye className="size-5" />}
+  </button>
+);
+
 export const SignInPage: React.FC<SignInPageProps> = ({
   title,
   description,
@@ -445,24 +464,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
     }
   };
 
-  const PasswordToggle = ({
-    shown,
-    onClick,
-    label,
-  }: {
-    shown: boolean;
-    onClick: () => void;
-    label: string;
-  }) => (
-    <button
-      type="button"
-      aria-label={label}
-      onClick={onClick}
-      className="absolute inset-y-0 right-3 grid place-items-center text-[rgb(var(--forest))]"
-    >
-      {shown ? <EyeOff className="size-5" /> : <Eye className="size-5" />}
-    </button>
-  );
+
 
   if (isLoading) {
     return (

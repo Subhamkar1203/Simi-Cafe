@@ -60,12 +60,12 @@ export default function OurStoryPage() {
             <div className="overflow-hidden rounded-3xl border border-[rgb(var(--border-soft))] shadow-2xl">
               <div className="relative w-full h-[60vh] max-h-[60vh]">
                 <Image 
-                  src="simi-cafe/static/arrietty_garden" 
+                  src={cloudinaryLoader({ src: "simi-cafe/static/arrietty_garden", width: 1024 })} 
                   alt="Magical handcrafted café narrative" 
                   fill
+                  unoptimized
                   sizes="(max-width: 1024px) 100vw, 1024px"
                   className="object-cover"
-                  loader={cloudinaryLoader}
                 />
               </div>
             </div>

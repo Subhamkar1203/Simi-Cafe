@@ -20,9 +20,9 @@ export interface AuthUser {
 interface AuthContextValue {
   user: AuthUser | null;
   isLoading: boolean;
-  signup: (data: SignupData) => Promise<{ ok: boolean; requiresOtp?: boolean; error?: string; details?: any[] }>;
-  verifySignupOtp: (data: SignupData & { otp: string }) => Promise<{ ok: boolean; error?: string; details?: any[] }>;
-  login: (data: LoginData) => Promise<{ ok: boolean; error?: string; details?: any[] }>;
+  signup: (data: SignupData) => Promise<{ ok: boolean; requiresOtp?: boolean; error?: string; details?: { path: string; message: string; [key: string]: unknown }[] }>;
+  verifySignupOtp: (data: SignupData & { otp: string }) => Promise<{ ok: boolean; error?: string; details?: { path: string; message: string; [key: string]: unknown }[] }>;
+  login: (data: LoginData) => Promise<{ ok: boolean; error?: string; details?: { path: string; message: string; [key: string]: unknown }[] }>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
 }
@@ -69,7 +69,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [refresh]);
 
   const signup = useCallback(
-    async (data: SignupData): Promise<{ ok: boolean; requiresOtp?: boolean; error?: string; details?: any[] }> => {
+    async (data: SignupData): Promise<{ ok: boolean; requiresOtp?: boolean; error?: string; details?: { path: string; message: string; [key: string]: unknown }[] }> => {
       try {
         const res = await fetch("/api/auth/signup", {
           method: "POST",
@@ -96,7 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 
   const verifySignupOtp = useCallback(
-    async (data: SignupData & { otp: string }): Promise<{ ok: boolean; error?: string; details?: any[] }> => {
+    async (data: SignupData & { otp: string }): Promise<{ ok: boolean; error?: string; details?: { path: string; message: string; [key: string]: unknown }[] }> => {
       try {
         const res = await fetch("/api/auth/verify-signup-otp", {
           method: "POST",
@@ -119,7 +119,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 
   const login = useCallback(
-    async (data: LoginData): Promise<{ ok: boolean; error?: string; details?: any[] }> => {
+    async (data: LoginData): Promise<{ ok: boolean; error?: string; details?: { path: string; message: string; [key: string]: unknown }[] }> => {
       try {
         const res = await fetch("/api/auth/login", {
           method: "POST",

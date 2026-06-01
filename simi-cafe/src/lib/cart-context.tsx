@@ -1,9 +1,8 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
-import { useAuth } from "./auth-context";
-import { useRouter } from "next/navigation";
 import { toaster } from "@/components/ui/toaster";
+import { useAuth } from "./auth-context";
 
 export interface CartItem {
   menu_item_id: number;
@@ -45,7 +44,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ cart: cartItems })
       });
-    } catch (e) {
+    } catch {
       console.error("Failed to sync cart to DB", e);
     }
   }, []);
@@ -72,13 +71,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                     // Trigger a sync back to DB
                     syncCartToDB(initialItems);
                   }
-                } catch (e) {}
+                } catch {}
               }
               
               setItems(initialItems);
             }
           }
-        } catch (e) {
+        } catch {
           console.error("Failed to load cart from DB", e);
         }
       } else {
@@ -86,7 +85,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (savedCart) {
           try {
             setItems(JSON.parse(savedCart));
-          } catch (e) {
+          } catch {
             console.error("Failed to parse cart", e);
           }
         }
@@ -96,7 +95,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     // Only load if not initialized or user state changed
     loadCart();
-  }, [user]);
+  }, [user, syncCartToDB]);
 
 
   // Save to local storage AND sync to DB if logged in
@@ -111,7 +110,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         }, 1000); // Debounce DB sync
       }
     }
-  }, [items, isInitialized, user]);
+  }, [items, isInitialized, user, syncCartToDB]);
 
   const addItem = useCallback((item: CartItem) => {
     setItems((current) => {
