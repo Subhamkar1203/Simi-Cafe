@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import cloudinaryLoader from "@/lib/cloudinary-loader";
 
 export function Preloader() {
   const [mounted, setMounted] = useState(true);
@@ -32,12 +33,13 @@ export function Preloader() {
       >
         <div className="relative h-48 w-48 animate-[pulse_2s_ease-in-out_infinite] drop-shadow-[0_0_15px_rgba(var(--accent)/0.3)]">
           <Image
-            src="/images/loading.png"
+            src="simi-cafe/static/loading"
             alt="Simi Café Loading"
             fill
             sizes="192px"
             className="object-contain"
             priority
+            loader={cloudinaryLoader}
           />
         </div>
         <p className="font-display text-3xl tracking-widest text-[rgb(var(--accent))] drop-shadow-sm opacity-90">Simi Café</p>

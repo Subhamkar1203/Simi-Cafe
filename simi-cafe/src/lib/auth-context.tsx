@@ -13,6 +13,7 @@ export interface AuthUser {
   successful_payments: number;
   charm_count: number;
   charms_redeemed: number;
+  profile_image?: string;
   created_at: string;
 }
 

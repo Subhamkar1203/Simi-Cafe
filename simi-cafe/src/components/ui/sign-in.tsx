@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import {
   Bell,
   Eye,
@@ -19,10 +19,14 @@ import {
   Trash2,
   Plus,
   Leaf,
-  Sparkles
+  Sparkles,
+  Camera,
+  Loader2
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { HeroContentCard } from "@/components/ui/hero-content-card";
+import cloudinaryLoader from "@/lib/cloudinary-loader";
 
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
@@ -113,7 +117,7 @@ export const SignInPage: React.FC<SignInPageProps> = ({
   initialMode = "login",
   initialReservations = [],
 }) => {
-  const { user, isLoading, signup, verifySignupOtp, login, logout } = useAuth();
+  const { user, isLoading, signup, verifySignupOtp, login, logout, refresh } = useAuth();
 
   const [mode, setMode] = useState<AuthMode>(initialMode);
   const [form, setForm] = useState(emptyForm);
@@ -125,6 +129,8 @@ export const SignInPage: React.FC<SignInPageProps> = ({
   const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
   const [otp, setOtp] = useState("");
   const [agreePolicy, setAgreePolicy] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [activeTab, setActiveTab] = useState<"profile" | "reservations" | "orders" | "favorites">("profile");
   const [orders, setOrders] = useState<any[]>([]);
@@ -142,6 +148,45 @@ export const SignInPage: React.FC<SignInPageProps> = ({
   }, [user, activeTab]);
 
   const { addItem } = useCart();
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      toaster.create({ title: "Invalid File", description: "Please select an image file.", type: "error" });
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      toaster.create({ title: "File Too Large", description: "Image must be under 5MB.", type: "error" });
+      return;
+    }
+
+    setIsUploadingAvatar(true);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("/api/profile/image", {
+        method: "PATCH",
+        body: formData,
+      });
+
+      if (res.ok) {
+        await refresh();
+        toaster.create({ title: "Profile Updated", description: "Your avatar has been updated successfully.", type: "success" });
+      } else {
+        const data = await res.json();
+        toaster.create({ title: "Upload Failed", description: data.error || "Failed to upload image.", type: "error" });
+      }
+    } catch (error) {
+      toaster.create({ title: "Error", description: "Network error during upload.", type: "error" });
+    } finally {
+      setIsUploadingAvatar(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -432,17 +477,19 @@ export const SignInPage: React.FC<SignInPageProps> = ({
     const pastOrders = orders.filter(o => ["completed", "cancelled"].includes(o.status));
 
     return (
-      <div className="rounded-[2rem] p-6 shadow-2xl site-panel sm:p-8">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between mb-8">
-          <div>
-            <p className="text-sm font-bold uppercase tracking-[0.22em] site-eyebrow">Account</p>
-            <h1 className="mt-3 font-serif text-4xl font-semibold leading-tight">Welcome, {user.name}</h1>
+      <HeroContentCard
+        className="shadow-2xl"
+        eyebrow="Account"
+        title={
+          <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+            <span>Welcome, {user.name}</span>
+            <span className="inline-flex w-fit items-center gap-2 rounded-full border border-[rgb(var(--border-soft))] bg-[rgb(var(--surface-muted)_/_0.62)] px-4 py-2 text-sm font-bold sm:mt-0">
+              <ShieldCheck className="size-4 text-[rgb(var(--forest))]" />
+              Signed in
+            </span>
           </div>
-          <span className="inline-flex w-fit items-center gap-2 rounded-full border border-[rgb(var(--border-soft))] bg-[rgb(var(--surface-muted)_/_0.62)] px-4 py-2 text-sm font-bold">
-            <ShieldCheck className="size-4 text-[rgb(var(--forest))]" />
-            Signed in
-          </span>
-        </div>
+        }
+      >
 
         {/* Premium Segmented Tabs Navigation */}
         <div className="mb-8 flex rounded-full border border-[rgb(var(--border-soft)_/_0.3)] bg-[rgb(var(--surface-raised)_/_0.6)] p-1.5 shadow-inner">
@@ -462,6 +509,42 @@ export const SignInPage: React.FC<SignInPageProps> = ({
 
         {activeTab === "profile" && (
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
+            {/* Avatar Section */}
+            <div className="mb-8 flex flex-col items-center sm:flex-row sm:items-center sm:gap-6">
+              <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  ref={fileInputRef}
+                  onChange={handleAvatarUpload}
+                />
+                <div className="relative size-32 overflow-hidden rounded-full border-4 border-[rgb(var(--surface-raised))] shadow-[0_0_20px_rgba(var(--accent)/0.15)] transition-all duration-300 group-hover:shadow-[0_0_25px_rgba(var(--accent)/0.3)] group-hover:border-[rgb(var(--accent)/0.4)]">
+                  {isUploadingAvatar ? (
+                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40 backdrop-blur-sm">
+                      <Loader2 className="size-8 animate-spin text-white" />
+                    </div>
+                  ) : (
+                    <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40 opacity-0 backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-100">
+                      <Camera className="size-8 text-white" />
+                    </div>
+                  )}
+                  <Image
+                    src={user.profile_image || "simi-cafe/static/Defaultpp"}
+                    alt="Profile Avatar"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, 33vw"
+                    loader={cloudinaryLoader}
+                  />
+                </div>
+              </div>
+              <div className="mt-4 flex flex-col items-center sm:items-start sm:mt-0">
+                <h3 className="font-serif text-3xl font-bold">{user.name}</h3>
+                <p className="site-muted mt-1">{user.email}</p>
+              </div>
+            </div>
+
             <div className="grid gap-4 sm:grid-cols-2">
               <ProfileField label="Full Name" value={user.name} />
               <ProfileField label="Email" value={user.email} />
@@ -525,9 +608,9 @@ export const SignInPage: React.FC<SignInPageProps> = ({
             </h2>
             
             {reservations.length === 0 ? (
-              <div className="relative flex flex-col items-center justify-center p-12 text-center overflow-hidden border border-[rgb(var(--border-soft))] rounded-[2.5rem] bg-gradient-to-b from-[rgb(var(--surface-raised)_/_0.6)] to-[rgb(var(--surface)_/_0.2)] shadow-sm">
-                <div className="absolute inset-0 bg-[url('/images/totoro_field.jpg')] bg-cover bg-center opacity-20 blur-[4px] pointer-events-none mix-blend-luminosity" />
-                <div className="absolute inset-0 bg-[rgb(var(--surface)_/_0.85)] backdrop-blur-xl pointer-events-none" />
+              <div className="relative overflow-hidden rounded-[2.5rem] p-10 text-center shadow-xl site-card border border-[rgb(var(--border-soft))]">
+                <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/dlupquidc/image/upload/f_auto,q_auto,c_fill,w_800/simi-cafe/static/totoro_field')] bg-cover bg-center opacity-20 blur-[4px] pointer-events-none mix-blend-luminosity" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--surface-raised)] to-transparent opacity-80 pointer-events-none" />
                 <Sparkles className="relative z-10 size-12 text-[rgb(var(--accent))] mb-5 opacity-80" />
                 <h3 className="relative z-10 font-serif text-3xl font-bold text-[rgb(var(--foreground))] mb-2">Awaiting your visit</h3>
                 <p className="relative z-10 text-[15px] text-[rgb(var(--foreground)_/_0.6)] mb-8 max-w-sm">You haven't made any reservations yet. Secure a table for your magical café moment.</p>
@@ -718,9 +801,9 @@ export const SignInPage: React.FC<SignInPageProps> = ({
             </h2>
             
             {favorites.length === 0 ? (
-              <div className="relative flex flex-col items-center justify-center p-8 text-center overflow-hidden border border-[rgb(var(--border-soft))] rounded-3xl shadow-inner">
-                <div className="absolute inset-0 bg-[url('/images/spirited_away_flowers.jpg')] bg-cover bg-center opacity-30 blur-[2px] pointer-events-none" />
-                <div className="absolute inset-0 bg-[rgb(var(--surface)_/_0.65)] backdrop-blur-md pointer-events-none" />
+              <div className="relative overflow-hidden rounded-[2.5rem] p-8 shadow-xl site-card border border-[rgb(var(--border-soft))] flex flex-col items-center text-center">
+                <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/dlupquidc/image/upload/f_auto,q_auto,c_fill,w_800/simi-cafe/static/spirited_away_flowers')] bg-cover bg-center opacity-30 blur-[2px] pointer-events-none" />
+                <div className="absolute inset-0 bg-gradient-to-b from-[var(--surface-raised)] to-transparent opacity-90 pointer-events-none" />
                 <p className="relative z-10 text-lg font-bold text-[rgb(var(--foreground))] mb-4 opacity-90">No favorites yet. Save the dishes that charm you.</p>
                 <Button className="relative z-10 shadow-lg" onClick={() => window.location.href = '/menu'}>Explore Menu</Button>
               </div>
@@ -737,14 +820,15 @@ export const SignInPage: React.FC<SignInPageProps> = ({
                       <div className="flex flex-col sm:flex-row h-full">
                         <div className="relative aspect-[4/3] sm:aspect-square sm:w-2/5 overflow-hidden">
                           <Image
-                            src={item.image_url || "/images/placeholder.jpg"}
+                            src={item.image_url || "simi-cafe/static/placeholder"}
                             alt={item.name}
                             fill
-                            sizes="(max-width: 768px) 100vw, 33vw"
                             className={cn(
                               "object-cover transition-transform duration-700 ease-[cubic-bezier(0.33,1,0.68,1)] group-hover:scale-110",
                               !item.image_url && "opacity-75 mix-blend-luminosity saturate-50"
                             )}
+                            sizes="(max-width: 640px) 100vw, 33vw"
+                            loader={cloudinaryLoader}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                           <button 
@@ -795,12 +879,16 @@ export const SignInPage: React.FC<SignInPageProps> = ({
             )}
           </div>
         )}
-      </div>
+      </HeroContentCard>
     );
   }
 
   return (
-    <div className="rounded-[2rem] p-6 shadow-2xl site-panel sm:p-8">
+    <HeroContentCard
+      className="shadow-2xl"
+      title={heading}
+      description={helperText}
+    >
       <div className="mb-7 flex rounded-full site-card p-1">
         {[
           { value: "login", label: "Login", icon: KeyRound },
@@ -826,9 +914,6 @@ export const SignInPage: React.FC<SignInPageProps> = ({
           );
         })}
       </div>
-
-      <h1 className="font-serif text-4xl font-semibold leading-tight">{heading}</h1>
-      <p className="mt-3 site-muted">{helperText}</p>
 
       {mode === "create" && !isVerifyingOtp && (
         <form className="mt-7 space-y-5" onSubmit={handleCreate} noValidate>
@@ -904,6 +989,6 @@ export const SignInPage: React.FC<SignInPageProps> = ({
           <Button type="button" variant="ghost" className="w-full" onClick={() => switchMode("login")}>Back to Login</Button>
         </form>
       )}
-    </div>
+    </HeroContentCard>
   );
 };

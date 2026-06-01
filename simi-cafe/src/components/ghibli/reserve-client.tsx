@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { Button } from "@/components/ui/button";
 import { toaster } from "@/components/ui/toaster";
+import { HeroContentCard } from "@/components/ui/hero-content-card";
 import { useAuth } from "@/lib/auth-context";
 import { ReservationScheduler } from "@/components/ghibli/reservation-scheduler";
 
@@ -120,7 +121,7 @@ export function ReserveClient({ initialTimeSlots }: { initialTimeSlots: string[]
   };
 
   return (
-    <div className="site-page relative px-5 pb-32 pt-28 sm:px-8 sm:pt-32">
+    <div className="site-page relative px-5 pb-32 pt-6 sm:px-8 sm:pt-8 md:pt-32">
       <AnimatePresence mode="wait">
         {status === "success" ? (
           <motion.section 
@@ -136,12 +137,12 @@ export function ReserveClient({ initialTimeSlots }: { initialTimeSlots: string[]
             <p className="text-xs font-bold uppercase tracking-[0.24em] site-eyebrow">
               Table Secured
             </p>
-            <h1 className="mt-4 font-serif text-4xl font-semibold sm:text-6xl text-[rgb(var(--foreground))]">
+            <h1 className="mt-4 font-serif text-[length:var(--fs-hero)] font-semibold text-[rgb(var(--foreground))]">
               We look forward to <br className="hidden sm:block" /> seeing you.
             </h1>
             
             <div className="mx-auto mt-12 max-w-md rounded-[2rem] border border-[rgb(var(--border-soft))] bg-[rgb(var(--surface-raised)_/_0.8)] p-8 shadow-xl backdrop-blur-xl text-left">
-              <h3 className="font-serif text-2xl font-bold mb-6">Reservation Details</h3>
+              <h3 className="font-serif text-[length:var(--fs-h3)] font-bold mb-6">Reservation Details</h3>
               <div className="space-y-4 text-sm font-medium">
                 <div className="flex justify-between border-b border-current/10 pb-4">
                   <span className="text-[rgb(var(--foreground)_/_0.6)]">Date</span>
@@ -181,19 +182,15 @@ export function ReserveClient({ initialTimeSlots }: { initialTimeSlots: string[]
             exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
             className="relative z-10 mx-auto grid max-w-7xl gap-16 lg:grid-cols-[1fr_1.2fr] lg:items-start lg:gap-20"
           >
-            <div className="max-w-xl site-hero-panel">
-              <p className="text-xs font-bold uppercase tracking-[0.24em] site-eyebrow sm:text-sm flex items-center gap-2">
-                <Sparkles className="size-4 text-[rgb(var(--accent))]" /> Reserve / Visit
-              </p>
-              <h1 className="mt-4 font-serif text-4xl font-semibold leading-tight sm:text-6xl lg:leading-[1.1]">
-                Secure your table for a warm, magical afternoon.
-              </h1>
-              <p className="mt-6 hidden md:block text-base leading-relaxed site-muted sm:text-[17px]">
-                Experience our luxury Ghibli-inspired ambience. Choose your preferred time, and we'll have your table ready. Walk-ins are always welcome when seats are available.
-              </p>
+            <HeroContentCard
+              className="max-w-xl"
+              eyebrow={<><Sparkles className="size-4 text-[rgb(var(--accent))]" /> Reserve / Visit</>}
+              title="Secure your table for a warm, magical afternoon."
+              description={<span className="hidden md:block">Experience our luxury Ghibli-inspired ambience. Choose your preferred time, and we'll have your table ready. Walk-ins are always welcome when seats are available.</span>}
+            >
               
               <div className="mt-10 rounded-[2.5rem] border border-[rgb(var(--border-soft))] bg-[rgb(var(--surface)_/_0.85)] p-8 shadow-md backdrop-blur-3xl sm:p-10">
-                <h3 className="font-serif text-3xl font-bold tracking-tight">Your Details</h3>
+                <h3 className="font-serif text-[length:var(--fs-h2)] font-bold tracking-tight">Your Details</h3>
                 <form id="reservation-form" onSubmit={handleSubmit} className="mt-6 space-y-5">
 
                   <div className="grid gap-5 sm:grid-cols-2">
@@ -272,7 +269,7 @@ export function ReserveClient({ initialTimeSlots }: { initialTimeSlots: string[]
                   </div>
                 </form>
               </div>
-            </div>
+            </HeroContentCard>
 
             {/* Right Column: Premium Date/Time Scheduler */}
             <div className="flex flex-col gap-6">

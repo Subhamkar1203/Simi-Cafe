@@ -3,6 +3,8 @@ import { Sparkles } from "lucide-react";
 import { ImageLayer } from "@/components/ghibli/image-layer";
 import { ParallaxSection } from "@/components/ghibli/parallax-section";
 import { ScrollReveal } from "@/components/ghibli/scroll-reveal";
+import { HeroContentCard } from "@/components/ui/hero-content-card";
+import cloudinaryLoader from "@/lib/cloudinary-loader";
 
 const timeline = [
   { year: "Dream", text: "A cafe imagined as a soft pause between busy days." },
@@ -19,11 +21,11 @@ export const metadata: Metadata = {
 
 export default function OurStoryPage() {
   return (
-    <div className="site-page pt-24 pb-32">
+    <div className="site-page pt-6 sm:pt-8 md:pt-24 pb-32">
       <ParallaxSection
         eyebrow="Our Story"
         title="Some places stay with you. This is one of them."
-        imageSrc="/images/arrietty_garden.jpg"
+        imageSrc="simi-cafe/static/arrietty_garden"
         imageAlt="A quiet storytelling garden scene"
       >
         <p>
@@ -35,13 +37,11 @@ export default function OurStoryPage() {
 
       <section className="site-section py-20 sm:py-28">
         <div className="mx-auto grid max-w-7xl gap-10 px-5 sm:px-8 lg:grid-cols-[0.8fr_1.2fr]">
-          <ScrollReveal className="site-hero-panel">
-            <p className="text-sm font-bold uppercase tracking-[0.24em] site-eyebrow flex items-center gap-2">
-              <Sparkles className="size-4 text-[rgb(var(--accent))]" /> Timeline
-            </p>
-            <h1 className="mt-4 font-serif text-5xl font-semibold leading-tight">
-              A small path through the woods.
-            </h1>
+          <ScrollReveal>
+            <HeroContentCard
+              eyebrow={<><Sparkles className="size-4 text-[rgb(var(--accent))]" /> Timeline</>}
+              title="A small path through the woods."
+            />
           </ScrollReveal>
           <div className="grid gap-4">
             {timeline.map((event) => (
@@ -60,11 +60,12 @@ export default function OurStoryPage() {
             <div className="overflow-hidden rounded-3xl border border-[rgb(var(--border-soft))] shadow-2xl">
               <div className="relative w-full h-[60vh] max-h-[60vh]">
                 <Image 
-                  src="/images/arrietty_garden.jpg" 
+                  src="simi-cafe/static/arrietty_garden" 
                   alt="Magical handcrafted café narrative" 
                   fill
                   sizes="(max-width: 1024px) 100vw, 1024px"
                   className="object-cover"
+                  loader={cloudinaryLoader}
                 />
               </div>
             </div>

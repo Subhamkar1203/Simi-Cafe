@@ -6,6 +6,7 @@ import { useCart } from "@/lib/cart-context";
 import { useAuth } from "@/lib/auth-context";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { HeroContentCard } from "@/components/ui/hero-content-card";
 
 export default function CheckoutPage() {
   const { items, totalAmount, taxAmount, finalTotal, clearCart } = useCart();
@@ -33,7 +34,7 @@ export default function CheckoutPage() {
   // Redirect if cart empty
   if (items.length === 0) {
     return (
-      <div className="site-page px-5 pb-32 pt-32 sm:px-8 flex flex-col items-center justify-center text-center">
+      <div className="site-page px-5 pb-32 pt-6 sm:pt-8 md:pt-32 sm:px-8 flex flex-col items-center justify-center text-center">
         <h1 className="font-serif text-4xl font-bold">Your cart is empty</h1>
         <Button className="mt-6" onClick={() => router.push("/menu")}>Back to Menu</Button>
       </div>
@@ -77,9 +78,9 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className="site-page px-5 pb-32 pt-32 sm:px-8">
+    <div className="site-page px-5 pb-32 pt-6 sm:pt-8 md:pt-32 sm:px-8">
       <div className="mx-auto max-w-5xl">
-        <h1 className="font-serif text-4xl font-bold sm:text-5xl">Checkout</h1>
+        <HeroContentCard title="Checkout" className="mb-10" />
         
         <div className="mt-10 grid gap-10 md:grid-cols-2">
           {/* Order Summary */}
@@ -87,8 +88,8 @@ export default function CheckoutPage() {
             <h2 className="mb-4 text-xl font-bold uppercase tracking-widest text-[rgb(var(--forest))]">Order Summary</h2>
             <ul className="flex flex-col gap-4 flex-1">
               {items.map(item => (
-                <li key={item.menu_item_id} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0">
-                  <div className="flex items-center gap-4">
+                <li key={item.menu_item_id} className="flex items-center justify-between border-b pb-4 last:border-0 last:pb-0 gap-4">
+                  <div className="flex items-center gap-4 min-w-0">
                     <div className="relative size-16 shrink-0">
                       <Image 
                         src={item.image_url || "/images/placeholder.jpg"} 
@@ -98,12 +99,12 @@ export default function CheckoutPage() {
                         className={`rounded-xl object-cover ${!item.image_url ? 'opacity-75 mix-blend-luminosity saturate-50' : ''}`} 
                       />
                     </div>
-                    <div>
-                      <p className="font-bold">{item.name}</p>
-                      <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                    <div className="min-w-0">
+                      <p className="font-bold line-clamp-2 leading-tight">{item.name}</p>
+                      <p className="text-sm text-muted-foreground mt-1">Qty: {item.quantity}</p>
                     </div>
                   </div>
-                  <p className="font-bold">₹{(item.price * item.quantity).toFixed(2)}</p>
+                  <p className="font-bold shrink-0">₹{(item.price * item.quantity).toFixed(2)}</p>
                 </li>
               ))}
             </ul>
@@ -132,12 +133,12 @@ export default function CheckoutPage() {
 
               <div>
                 <h2 className="mb-4 text-lg font-bold">Order Type</h2>
-                <div className="flex gap-4">
-                  <label className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border p-4 font-semibold transition has-[:checked]:border-[rgb(var(--accent))] has-[:checked]:bg-[rgb(var(--accent)_/_0.1)]">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <label className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border p-4 h-14 font-semibold transition has-[:checked]:border-[rgb(var(--accent))] has-[:checked]:bg-[rgb(var(--accent)_/_0.1)]">
                     <input type="radio" name="orderType" value="pickup" checked={orderType === "pickup"} onChange={() => setOrderType("pickup")} className="sr-only" />
                     Pickup
                   </label>
-                  <label className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border p-4 font-semibold transition has-[:checked]:border-[rgb(var(--accent))] has-[:checked]:bg-[rgb(var(--accent)_/_0.1)]">
+                  <label className="flex flex-1 cursor-pointer items-center justify-center gap-2 rounded-xl border p-4 h-14 font-semibold transition has-[:checked]:border-[rgb(var(--accent))] has-[:checked]:bg-[rgb(var(--accent)_/_0.1)]">
                     <input type="radio" name="orderType" value="delivery" checked={orderType === "delivery"} onChange={() => setOrderType("delivery")} className="sr-only" />
                     Delivery
                   </label>

@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-
+import Image from "next/image";
 import { cn } from "@/lib/utils";
+import cloudinaryLoader from "@/lib/cloudinary-loader";
 
 interface Tab {
   id: string;
@@ -23,10 +24,15 @@ const defaultTabs: Tab[] = [
     label: "Forest",
     content: (
       <div className="grid h-full w-full gap-4 sm:grid-cols-2">
-        <img
-          src="/images/forest_statue.jpg"
+        <Image
+          src="simi-cafe/static/forest_statue"
           alt="Mossy forest path"
           className="!m-0 h-60 w-full rounded-lg border-none object-cover shadow-[0_0_20px_rgba(61,43,31,0.2)]"
+          width={600}
+          height={300}
+          sizes="(max-width: 640px) 100vw, 50vw"
+          loading="lazy"
+          loader={cloudinaryLoader}
         />
         <div className="flex flex-col gap-y-2">
           <h2 className="!m-0 text-2xl font-bold text-white">Forest Corner</h2>
@@ -42,10 +48,15 @@ const defaultTabs: Tab[] = [
     label: "Garden",
     content: (
       <div className="grid h-full w-full gap-4 sm:grid-cols-2">
-        <img
-          src="/images/arrietty_garden.jpg"
+        <Image
+          src="simi-cafe/static/arrietty_garden"
           alt="Green cafe garden"
           className="!m-0 h-60 w-full rounded-lg border-none object-cover shadow-[0_0_20px_rgba(61,43,31,0.2)]"
+          width={600}
+          height={300}
+          sizes="(max-width: 640px) 100vw, 50vw"
+          loading="lazy"
+          loader={cloudinaryLoader}
         />
         <div className="flex flex-col gap-y-2">
           <h2 className="!m-0 text-2xl font-bold text-white">Garden Table</h2>
@@ -61,10 +72,15 @@ const defaultTabs: Tab[] = [
     label: "Meadow",
     content: (
       <div className="grid h-full w-full gap-4 sm:grid-cols-2">
-        <img
-          src="/images/totoro_field.jpg"
+        <Image
+          src="simi-cafe/static/totoro_field"
           alt="Open meadow at golden hour"
           className="!m-0 h-60 w-full rounded-lg border-none object-cover shadow-[0_0_20px_rgba(61,43,31,0.2)]"
+          width={600}
+          height={300}
+          sizes="(max-width: 640px) 100vw, 50vw"
+          loading="lazy"
+          loader={cloudinaryLoader}
         />
         <div className="flex flex-col gap-y-2">
           <h2 className="!m-0 text-2xl font-bold text-white">Meadow Window</h2>

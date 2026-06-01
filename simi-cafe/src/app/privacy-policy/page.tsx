@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { Shield, Leaf, Heart, Mail, Lock, Clock, Eye, Server, UserCheck, Settings } from "lucide-react";
 import { motion } from "framer-motion";
+import { HeroContentCard } from "@/components/ui/hero-content-card";
 
 export const metadata: Metadata = {
   title: "Privacy Policy",
@@ -9,22 +10,21 @@ export const metadata: Metadata = {
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="site-page relative px-5 pb-32 pt-32 sm:px-8">
+    <div className="site-page relative px-5 pb-32 pt-6 sm:pt-8 md:pt-32 sm:px-8">
       <section className="relative mx-auto max-w-4xl z-10">
-        <div className="max-w-3xl mb-12">
-          <p className="text-sm font-bold uppercase tracking-[0.24em] site-eyebrow flex items-center gap-2">
-            <Shield className="size-4" /> Legal & Privacy
-          </p>
-          <h1 className="mt-3 font-serif text-5xl font-semibold leading-tight sm:text-7xl">
-            Privacy Policy
-          </h1>
-          <p className="mt-5 text-lg leading-8 site-muted">
-            At Simi Café, we respect your privacy and are committed to protecting the personal information you share with us while experiencing our magical world.
-          </p>
-          <p className="mt-2 text-sm font-semibold text-[rgb(var(--forest))]">
-            Last Updated: May 31, 2026
-          </p>
-        </div>
+        <HeroContentCard
+          className="max-w-3xl mb-12"
+          eyebrow={<><Shield className="size-4" /> Legal & Privacy</>}
+          title="Privacy Policy"
+          description={
+            <>
+              At Simi Café, we respect your privacy and are committed to protecting the personal information you share with us while experiencing our magical world.
+              <p className="mt-4 text-sm font-semibold text-[rgb(var(--forest))]">
+                Last Updated: May 31, 2026
+              </p>
+            </>
+          }
+        />
 
         <div className="flex flex-col gap-10 rounded-[2.5rem] border border-[rgb(var(--border-soft)_/_0.6)] bg-[rgb(var(--surface-raised)_/_0.85)] p-8 shadow-sm backdrop-blur-md md:p-12">
           

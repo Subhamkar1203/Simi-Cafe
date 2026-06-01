@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { query } from "../../db";
-import { verifyAdminPassword, createAdminSession, clearAdminSession, requireAdminAuth } from "../../utils/admin-auth";
+import { verifyAdminPassword, createAdminSession, clearAdminSession, requireAdminAuth, checkRateLimit, recordFailedLogin, resetLoginAttempts } from "../../utils/admin-auth";
 import type { RowDataPacket } from "mysql2/promise";
 import bcrypt from "bcryptjs";
 
@@ -17,9 +17,15 @@ interface AdminRow extends RowDataPacket {
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
+    const ip = req.ip || req.socket.remoteAddress || "0.0.0.0";
 
     if (!email || !password) {
       return res.status(400).json({ error: "Email and password required" });
+    }
+
+    const rateLimitCheck = await checkRateLimit(email, ip);
+    if (!rateLimitCheck.allowed) {
+      return res.status(429).json({ error: `Too many failed login attempts. Try again later.` });
     }
 
     const admins = await query<AdminRow[]>(
@@ -28,20 +34,20 @@ router.post("/login", async (req, res) => {
     );
 
     if (admins.length === 0) {
+      await recordFailedLogin(email, ip);
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
     const admin = admins[0];
 
-    // For development: allow plain text match OR bcrypt match
-    const isValidPassword =
-      admin.password_hash === password ||
-      (await bcrypt.compare(password, admin.password_hash).catch(() => false));
+    const isValidPassword = await verifyAdminPassword(password, admin.password_hash).catch(() => false);
 
     if (!isValidPassword) {
+      await recordFailedLogin(email, ip);
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
+    await resetLoginAttempts(email, ip);
     await createAdminSession(res, admin.id, admin.role);
 
     res.json({ success: true, admin: { name: admin.name, role: admin.role } });

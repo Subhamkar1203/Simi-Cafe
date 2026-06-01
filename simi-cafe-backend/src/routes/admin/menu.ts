@@ -4,6 +4,7 @@ import { requireAdminAuth } from "../../utils/admin-auth";
 import { validate } from "../../utils/validate";
 import { z } from "zod";
 import type { RowDataPacket } from "mysql2/promise";
+import { extractPublicId, deleteImage } from "../../config/cloudinary";
 
 const router = Router();
 
@@ -111,11 +112,28 @@ router.put("/", requireAdminAuth, validate(menuItemUpdateSchema), async (req, re
     const updates = [];
     const values = [];
 
+    if (image_url !== undefined) {
+      // Fetch existing item to get old image URL
+      const existingItems = await query<MenuItemRow[]>("SELECT image_url FROM menu_items WHERE id = ?", [id]);
+      if (existingItems.length > 0 && existingItems[0].image_url && existingItems[0].image_url !== image_url) {
+        // Different image URL provided (or cleared), try to delete old one from Cloudinary
+        const publicId = extractPublicId(existingItems[0].image_url);
+        if (publicId) {
+          try {
+            await deleteImage(publicId);
+          } catch (delErr) {
+            console.error("Failed to delete old image from Cloudinary:", delErr);
+          }
+        }
+      }
+      updates.push("image_url = ?"); 
+      values.push(image_url || null);
+    }
+
     if (category_id !== undefined) { updates.push("category_id = ?"); values.push(category_id); }
     if (name !== undefined) { updates.push("name = ?"); values.push(name); }
     if (description !== undefined) { updates.push("description = ?"); values.push(description); }
     if (price !== undefined) { updates.push("price = ?"); values.push(price); }
-    if (image_url !== undefined) { updates.push("image_url = ?"); values.push(image_url || null); }
     if (diet_type_id !== undefined) { updates.push("diet_type_id = ?"); values.push(diet_type_id); }
     if (is_available !== undefined) { updates.push("is_available = ?"); values.push(is_available ? 1 : 0); }
     if (is_seasonal !== undefined) { updates.push("is_seasonal = ?"); values.push(is_seasonal ? 1 : 0); }
@@ -149,7 +167,23 @@ router.delete("/", requireAdminAuth, validate(deleteMenuSchema), async (req, res
   try {
     const { id } = req.body;
 
+    // Fetch existing item to get old image URL before deleting
+    const existingItems = await query<MenuItemRow[]>("SELECT image_url FROM menu_items WHERE id = ?", [id]);
+    
     await execute("DELETE FROM menu_items WHERE id = ?", [id]);
+
+    // Delete image from Cloudinary if it exists
+    if (existingItems.length > 0 && existingItems[0].image_url) {
+      const publicId = extractPublicId(existingItems[0].image_url);
+      if (publicId) {
+        try {
+          await deleteImage(publicId);
+        } catch (delErr) {
+          console.error("Failed to delete image from Cloudinary:", delErr);
+        }
+      }
+    }
+
     res.json({ success: true });
   } catch (error) {
     console.error("Delete menu item error:", error);

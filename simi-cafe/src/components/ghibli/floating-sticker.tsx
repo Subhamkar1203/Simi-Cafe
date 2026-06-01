@@ -15,7 +15,7 @@ export function FloatingSticker() {
 
   return (
     <motion.div
-      className="fixed bottom-6 right-6 z-50 pointer-events-auto cursor-pointer"
+      className="hidden md:block fixed bottom-6 right-6 z-50 pointer-events-auto cursor-pointer"
       initial={{ y: 100, rotate: -20, opacity: 0 }}
       animate={{ y: 0, rotate: 0, opacity: 1 }}
       transition={{ 

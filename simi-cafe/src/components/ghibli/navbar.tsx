@@ -70,9 +70,9 @@ export function Navbar() {
 
       <style>{`
         .nav-liquid-lens {
-          background-color: rgb(var(--surface) / 0.4);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
+          background-color: rgb(var(--surface) / 0.55);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
           
           box-shadow: 
             inset 0 0 0 1px rgba(255, 255, 255, 0.15),
@@ -93,10 +93,10 @@ export function Navbar() {
         }
       `}</style>
 
-      <header className="fixed bottom-4 md:bottom-auto md:top-4 left-0 right-0 z-[60] flex justify-center pointer-events-none">
-        <div className="relative pointer-events-auto rounded-full p-[2px] w-[calc(100%-2rem)] md:w-[90vw] max-w-[800px]">
+      <header className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] md:bottom-auto md:top-4 left-0 right-0 z-[60] flex justify-center pointer-events-none px-3 sm:px-5 md:px-0">
+        <div className="relative pointer-events-auto rounded-full p-[2px] w-full sm:w-[90vw] md:w-[90vw] max-w-[800px]">
           {/* ISOLATED BACKGROUND LENS FOR NAVBAR */}
-          <span className="nav-liquid-lens absolute inset-0 -z-10 rounded-[inherit] pointer-events-none" />
+          <span className="nav-liquid-lens absolute inset-0 -z-10 rounded-[inherit] pointer-events-none shadow-[0_8px_32px_rgba(0,0,0,0.12)]" />
 
           <nav
             className="interactive-nav relative z-10 w-full h-full"

@@ -154,7 +154,7 @@ export const ReservationScheduler: React.FC<ReservationSchedulerProps> = ({
   };
 
   return (
-    <div className={cn('w-full rounded-[2.5rem] border border-[rgb(var(--border-soft)_/_0.8)] bg-[rgb(var(--surface)_/_0.85)] p-8 shadow-md backdrop-blur-3xl dark:bg-[rgb(var(--surface)_/_0.8)] transition-all', className)}>
+    <div className={cn('w-full rounded-[2.5rem] border border-[rgb(var(--border-soft)_/_0.8)] bg-[rgb(var(--surface)_/_0.85)] p-5 sm:p-8 shadow-md backdrop-blur-3xl dark:bg-[rgb(var(--surface)_/_0.8)] transition-all', className)}>
       <div className="space-y-8">
         
         {/* Date Selection Header */}

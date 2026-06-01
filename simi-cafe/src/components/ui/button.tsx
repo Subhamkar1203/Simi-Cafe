@@ -21,10 +21,10 @@ const buttonVariants = cva(
           "bg-[rgb(var(--earth))] text-[rgb(var(--cream))] hover:brightness-110",
       },
       size: {
-        default: "h-11 px-5",
-        sm: "h-9 px-4",
-        lg: "h-13 px-7 text-base",
-        icon: "size-11",
+        default: "min-h-[44px] h-11 sm:h-12 px-5 sm:px-6",
+        sm: "min-h-[40px] h-10 px-4",
+        lg: "min-h-[48px] h-12 sm:h-14 px-6 sm:px-8 text-[15px] sm:text-base",
+        icon: "size-11 sm:size-12 min-h-[44px]",
       },
     },
     defaultVariants: {

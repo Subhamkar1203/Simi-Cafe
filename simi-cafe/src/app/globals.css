@@ -20,6 +20,19 @@
   --page-overlay: linear-gradient(180deg,
       rgba(252, 249, 242, 0.65),
       rgba(252, 249, 242, 0.95));
+
+  /* Safe Area Variables */
+  --sa-top: env(safe-area-inset-top, 0px);
+  --sa-bottom: env(safe-area-inset-bottom, 0px);
+  --sa-left: env(safe-area-inset-left, 0px);
+  --sa-right: env(safe-area-inset-right, 0px);
+
+  /* Fluid Typography */
+  --fs-hero: clamp(2.5rem, 6vw + 1rem, 5rem);
+  --fs-h1: clamp(2.25rem, 5vw + 0.5rem, 3.75rem);
+  --fs-h2: clamp(1.8rem, 4vw + 0.5rem, 2.5rem);
+  --fs-h3: clamp(1.5rem, 3vw + 0.5rem, 2rem);
+  --fs-body: clamp(0.9rem, 1vw + 0.5rem, 1.125rem);
 }
 
 @theme inline {
@@ -71,7 +84,7 @@ html {
 
 @layer components {
   .site-page {
-    min-height: 100svh;
+    min-height: 100dvh;
     background: transparent;
   }
 
@@ -141,6 +154,66 @@ html {
     box-shadow: 0 24px 64px rgb(0 0 0 / 0.4), inset 0 1px 0 rgb(255 255 255 / 0.1), inset 0 0 20px rgb(255 255 255 / 0.05);
   }
 
+  /* --- Premium Hero Card --- */
+  .premium-hero-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 2rem;
+    padding: 2rem;
+    /* Soft warm ivory / cream glassmorphism */
+    background: rgb(253 248 236 / 0.82); 
+    color: rgb(54 38 28); 
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    /* Subtle translucency + backdrop blur + shadow depth */
+    backdrop-filter: blur(28px);
+    -webkit-backdrop-filter: blur(28px);
+    box-shadow: 
+      0 32px 64px -12px rgba(31, 24, 16, 0.25), 
+      0 0 40px rgba(253, 248, 236, 0.4), 
+      inset 0 1px 0 rgba(255, 255, 255, 0.9), 
+      inset 0 0 32px rgba(255, 255, 255, 0.4);
+    /* Contrast enhancement behind text */
+    text-shadow: 0 1px 2px rgba(253, 248, 236, 0.8);
+  }
+
+  @media (min-width: 640px) {
+    .premium-hero-card {
+      border-radius: 2.5rem;
+      padding: 3rem;
+    }
+  }
+
+  /* Refined border glow */
+  .premium-hero-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.1) 40%, rgba(255,255,255,0.4));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .dark .premium-hero-card {
+    /* Rich, dark, soft translucent glass */
+    background: rgb(30 44 36 / 0.78);
+    color: rgb(250 243 224);
+    border: 1px solid rgba(250, 243, 224, 0.15);
+    box-shadow: 
+      0 32px 64px -12px rgba(0, 0, 0, 0.6), 
+      0 0 40px rgba(30, 44, 36, 0.4), 
+      inset 0 1px 0 rgba(255, 255, 255, 0.1), 
+      inset 0 0 32px rgba(255, 255, 255, 0.05);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  }
+
+  .dark .premium-hero-card::before {
+    background: linear-gradient(135deg, rgba(250,243,224,0.3), transparent 40%, rgba(250,243,224,0.1));
+  }
+
   .site-input {
     border: 1px solid rgb(var(--border-soft));
     background: rgb(var(--surface-raised) / 0.65);
@@ -179,7 +252,7 @@ html {
   }
 
   .site-hero-background {
-    background-image: url("/images/Background.png");
+    background-image: url("https://res.cloudinary.com/dlupquidc/image/upload/f_auto,q_auto,c_fill,w_1920/simi-cafe/static/Background.png");
     background-position: center center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -187,7 +260,7 @@ html {
 
   @media (max-width: 767px) {
     .site-hero-background {
-      background-image: url("/images/BackgroundMobile.png");
+      background-image: url("https://res.cloudinary.com/dlupquidc/image/upload/f_auto,q_auto,c_fill,w_800/simi-cafe/static/BackgroundMobile.png");
       background-position: center center;
       background-size: cover;
     }
@@ -515,8 +588,16 @@ html {
   }
 }
 
-/* --- Ghibli Micro-Interactions --- */
+/* --- Ghibli Micro-Interactions & Responsive Utilities --- */
 @layer utilities {
+  .pt-safe {
+    padding-top: max(1.5rem, var(--sa-top));
+  }
+  
+  .pb-safe {
+    padding-bottom: max(1.5rem, var(--sa-bottom));
+  }
+
   .hover-magic {
     transition: transform 300ms cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 300ms ease;
   }

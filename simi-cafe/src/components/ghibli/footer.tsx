@@ -34,7 +34,7 @@ export function Footer() {
   }
 
   return (
-    <footer className="site-footer px-5 pb-24 pt-14 md:pb-10 lg:pt-18">
+    <footer className="site-footer px-5 pb-[calc(7rem+env(safe-area-inset-bottom))] pt-14 md:pb-10 lg:pt-18">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr_0.85fr]">
           <section className="footer-card rounded-[1.75rem] p-6 sm:p-8">

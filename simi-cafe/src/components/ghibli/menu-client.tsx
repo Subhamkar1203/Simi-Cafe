@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { HeroContentCard } from "@/components/ui/hero-content-card";
 import { useCart } from "@/lib/cart-context";
 import { useAuth } from "@/lib/auth-context";
 import { cn } from "@/lib/utils";
@@ -74,7 +75,7 @@ const MenuItemCard = memo(({
             <div className="flex-1">
               <p className="text-[11px] font-black uppercase tracking-[0.3em] text-[rgb(var(--forest))] drop-shadow-sm">{item.category_name}</p>
               <div className="mt-2.5 flex items-start justify-between gap-3">
-                <h2 className="font-serif text-[1.65rem] font-bold leading-tight tracking-tight text-[rgb(var(--foreground))] group-hover:text-[rgb(var(--accent))] transition-colors duration-500">{item.name}</h2>
+                <h2 className="font-serif text-[length:var(--fs-h3)] font-bold leading-tight tracking-tight text-[rgb(var(--foreground))] group-hover:text-[rgb(var(--accent))] transition-colors duration-500">{item.name}</h2>
                 <motion.button 
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
@@ -95,12 +96,12 @@ const MenuItemCard = memo(({
               </div>
             </div>
           </div>
-          <p className="mt-3 text-[14.5px] leading-relaxed text-muted-foreground line-clamp-2 opacity-90">{item.description}</p>
+          <p className="mt-3 text-[length:var(--fs-body)] leading-relaxed text-muted-foreground line-clamp-2 opacity-90">{item.description}</p>
         </div>
         
         <div className="mt-8 flex flex-col gap-6">
           <div className="flex items-end justify-between">
-            <p className="text-[1.65rem] font-bold tracking-tighter site-price">₹{item.price}</p>
+            <p className="text-[length:var(--fs-h3)] font-bold tracking-tighter site-price">₹{item.price}</p>
             <div className="flex flex-wrap gap-2 justify-end">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-current/10 bg-[rgb(var(--surface)_/_0.5)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                 <Leaf className={cn("size-3", itemDiet === "Vegan" ? "text-green-600" : itemDiet === "Veg" ? "text-green-500" : itemDiet === "Non-Veg" ? "text-red-400" : "text-amber-500")} />
@@ -207,19 +208,14 @@ export function MenuClient({ initialMenuData }: { initialMenuData: any }) {
   }, [items, category, diet, search, sort]);
 
   return (
-    <div className="site-page relative px-5 pb-32 pt-32 sm:px-8">
+    <div className="site-page relative px-5 pb-16 pt-6 sm:pt-8 md:pb-32 md:pt-32 sm:px-8">
       <section className="relative mx-auto max-w-7xl z-10">
-        <div className="max-w-2xl site-hero-panel">
-          <p className="text-sm font-bold uppercase tracking-[0.24em] site-eyebrow flex items-center gap-2">
-            <Sparkles className="size-4 text-[rgb(var(--accent))]" /> Our Menu
-          </p>
-          <h1 className="mt-4 font-serif text-5xl font-semibold leading-tight sm:text-7xl">
-            What would you like today?
-          </h1>
-          <p className="mt-6 text-lg leading-relaxed site-muted">
-            Browse and plan your order. Order ahead for pickup or dine-in.
-          </p>
-        </div>
+        <HeroContentCard
+          className="max-w-2xl"
+          eyebrow={<><Sparkles className="size-4 text-[rgb(var(--accent))]" /> Our Menu</>}
+          title="What would you like today?"
+          description="Browse and plan your order. Order ahead for pickup or dine-in."
+        />
 
         <div className="mt-10 flex flex-col gap-5 rounded-3xl p-5 md:flex-row md:items-center md:justify-between site-panel shadow-sm">
           {categories.length > 0 && (

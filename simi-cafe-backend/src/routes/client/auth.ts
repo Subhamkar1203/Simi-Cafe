@@ -18,6 +18,7 @@ interface UserRow extends RowDataPacket {
   successful_payments: number;
   charm_count: number;
   charms_redeemed: number;
+  profile_image: string;
   created_at: string;
 }
 
@@ -40,7 +41,7 @@ router.post("/login", validate(loginSchema), async (req, res) => {
 
     const users = await query<UserRow[]>(
       `SELECT id, name, email, phone, password_hash,
-              total_visits, successful_payments, charm_count, charms_redeemed, created_at
+              total_visits, successful_payments, charm_count, charms_redeemed, profile_image, created_at
        FROM users WHERE email = ? LIMIT 1`,
       [emailNorm]
     );
@@ -71,6 +72,7 @@ router.post("/login", validate(loginSchema), async (req, res) => {
         successful_payments: user.successful_payments,
         charm_count: user.charm_count,
         charms_redeemed: user.charms_redeemed,
+        profile_image: user.profile_image || "/images/Defaultpp.png",
         created_at: user.created_at,
       },
     });
@@ -191,6 +193,7 @@ router.post("/verify-signup-otp", validate(verifyOtpSchema), async (req, res) =>
         successful_payments: 0,
         charm_count: 0,
         charms_redeemed: 0,
+        profile_image: "/images/Defaultpp.png",
         created_at: new Date().toISOString(),
       },
     });
@@ -210,7 +213,7 @@ router.get("/me", requireAuth, async (req, res) => {
     const userId = (req as any).user.userId;
 
     const users = await query<UserRow[]>(
-      `SELECT id, name, email, phone, total_visits, successful_payments, charm_count, charms_redeemed, created_at
+      `SELECT id, name, email, phone, total_visits, successful_payments, charm_count, charms_redeemed, profile_image, created_at
        FROM users WHERE id = ? LIMIT 1`,
       [userId]
     );

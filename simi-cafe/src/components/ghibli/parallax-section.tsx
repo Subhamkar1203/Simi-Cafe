@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Sparkles } from "lucide-react";
 
 import { ScrollReveal } from "./scroll-reveal";
+import cloudinaryLoader from "@/lib/cloudinary-loader";
 
 interface ParallaxSectionProps {
   eyebrow?: string;
@@ -41,7 +42,7 @@ export function ParallaxSection({
         {imageSrc && (
           <ScrollReveal className={cn(reverse && "lg:order-1")}>
             <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] border border-[rgb(var(--border-soft))] shadow-2xl">
-              <Image src={imageSrc} alt={imageAlt} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
+              <Image src={imageSrc} alt={imageAlt} fill sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" loader={cloudinaryLoader} />
               <div className="absolute inset-0 bg-gradient-to-t from-[#3d2b1f]/20 to-transparent" />
             </div>
           </ScrollReveal>

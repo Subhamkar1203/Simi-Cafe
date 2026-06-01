@@ -34,7 +34,7 @@ export default async function AccountPage() {
   }
 
   return (
-    <div className="site-page relative px-5 pb-32 pt-28 sm:px-8 sm:pt-32">
+    <div className="site-page relative px-5 pb-32 pt-6 sm:px-8 sm:pt-8 md:pt-32">
       <section className="mx-auto max-w-2xl">
         <SignInPage initialReservations={initialReservations} />
       </section>

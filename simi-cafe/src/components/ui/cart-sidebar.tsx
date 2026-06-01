@@ -6,6 +6,7 @@ import { useCart } from "@/lib/cart-context";
 import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import cloudinaryLoader from "@/lib/cloudinary-loader";
 
 export function CartSidebar() {
   const { items, isCartOpen, setIsCartOpen, removeItem, updateQuantity, clearCart, totalAmount, taxAmount, finalTotal } = useCart();
@@ -50,7 +51,7 @@ export function CartSidebar() {
           <div className="flex-1 overflow-y-auto py-6 pr-2">
             {items.length === 0 ? (
               <div className="relative flex h-full flex-col items-center justify-center text-center text-[rgb(var(--foreground))] overflow-hidden rounded-[2rem] mx-2 p-6 shadow-inner border border-[rgb(var(--border-soft))]">
-                <div className="absolute inset-0 bg-[url('/images/spirited_away_flowers.jpg')] bg-cover bg-center opacity-30 blur-[2px] pointer-events-none" />
+                <div className="absolute inset-0 bg-[url('https://res.cloudinary.com/dlupquidc/image/upload/f_auto,q_auto,c_fill,w_800/simi-cafe/static/spirited_away_flowers')] bg-cover bg-center opacity-30 blur-[2px] pointer-events-none" />
                 <div className="absolute inset-0 bg-[rgb(var(--surface)_/_0.6)] backdrop-blur-md pointer-events-none" />
                 
                 <div className="relative z-10 mb-4 rounded-full bg-[rgb(var(--surface-raised)_/_0.8)] p-4 shadow-sm border border-[rgb(var(--border-soft))]">
@@ -74,11 +75,12 @@ export function CartSidebar() {
                   <li key={item.menu_item_id} className="group relative flex gap-4 rounded-2xl border border-[rgb(var(--border-soft))] bg-[rgb(var(--surface-raised)_/_0.4)] p-3 transition hover:border-[rgb(var(--forest)_/_0.3)] hover:shadow-md">
                       <div className="relative size-16 shrink-0 rounded-xl overflow-hidden border shadow-sm">
                         <Image 
-                          src={item.image_url || "/images/placeholder.jpg"} 
+                          src={item.image_url || "simi-cafe/static/placeholder"} 
                           alt="" 
                           fill
                           sizes="64px"
                           className={`object-cover ${!item.image_url ? 'opacity-75 mix-blend-luminosity saturate-50' : ''}`} 
+                          loader={cloudinaryLoader}
                         />
                       </div>
                     <div className="flex flex-1 flex-col justify-between">

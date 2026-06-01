@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     siteName: "Simi Café",
     images: [
       {
-        url: "/images/spirited_away_flowers.jpg",
+        url: "https://res.cloudinary.com/dlupquidc/image/upload/f_auto,q_auto,c_fill,w_1200/simi-cafe/static/spirited_away_flowers",
         width: 1200,
         height: 630,
         alt: "Simi Cafe Atmospheric View",
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Simi Café",
     description: "Step into our handcrafted, storybook cafe.",
-    images: ["/images/spirited_away_flowers.jpg"],
+    images: ["https://res.cloudinary.com/dlupquidc/image/upload/f_auto,q_auto,c_fill,w_1200/simi-cafe/static/spirited_away_flowers"],
   },
 };
 
@@ -84,20 +84,21 @@ export default function RootLayout({
     priority: true,
     sizes: "(max-width: 768px) 100vw, 50vw",
     quality: 90 as const,
+    loader: require("@/lib/cloudinary-loader").default,
   };
 
   const {
     props: { srcSet: desktop },
   } = getImageProps({
     ...common,
-    src: "/images/Background.png",
+    src: "simi-cafe/static/Background",
   });
 
   const {
     props: { srcSet: mobile, ...rest },
   } = getImageProps({
     ...common,
-    src: "/images/BackgroundMobile.png",
+    src: "simi-cafe/static/BackgroundMobile",
   });
 
   return (
@@ -139,7 +140,7 @@ export default function RootLayout({
 
                 <Navbar />
 
-                <main className="flex-1 w-full relative z-10">
+                <main className="flex-1 w-full relative z-10 pb-[calc(6rem+env(safe-area-inset-bottom))] md:pb-0">
                   {children}
                 </main>
 

@@ -63,8 +63,12 @@ app.use("/api/client/auth/signup", signupLimiter);
 
 app.use("/api/", apiLimiter);
 
+const allowedOrigins = process.env.ALLOWED_ORIGINS 
+  ? process.env.ALLOWED_ORIGINS.split(",").map(url => url.trim())
+  : ["http://localhost:3000", "http://localhost:3001", "http://localhost:8349"];
+
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:3001", "http://localhost:8349"], // Client and Admin URLs
+  origin: allowedOrigins,
   credentials: true,
 }));
 app.use(express.json());
@@ -81,12 +85,14 @@ import clientMenuRouter from "./routes/client/menu";
 import clientOrdersRouter from "./routes/client/orders";
 import clientReservationsRouter from "./routes/client/reservations";
 import clientUserRouter from "./routes/client/user";
+import clientProfileRouter from "./routes/client/profile";
 
 app.use("/api/client/auth", clientAuthRouter);
 app.use("/api/client/menu", clientMenuRouter);
 app.use("/api/client/orders", clientOrdersRouter);
 app.use("/api/client/reservations", clientReservationsRouter);
 app.use("/api/client/user", clientUserRouter);
+app.use("/api/client/profile", clientProfileRouter);
 
 import adminAuthRouter from "./routes/admin/auth";
 import adminCategoriesRouter from "./routes/admin/categories";

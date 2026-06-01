@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Clock, CheckCircle, ChefHat, XCircle, RefreshCw, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { HeroContentCard } from "@/components/ui/hero-content-card";
 
 export default function OrdersPage() {
   const { user } = useAuth();
@@ -102,7 +103,7 @@ export default function OrdersPage() {
 
   if (isLoading) {
     return (
-      <div className="site-page px-5 pb-32 pt-32 sm:px-8 flex justify-center">
+      <div className="site-page px-5 pb-32 pt-6 sm:pt-8 md:pt-32 sm:px-8 flex justify-center">
         <div className="size-10 animate-spin rounded-full border-4 border-[rgb(var(--border-soft))] border-t-[rgb(var(--accent))]" />
       </div>
     );
@@ -120,17 +121,17 @@ export default function OrdersPage() {
   };
 
   return (
-    <div className="site-page px-5 pb-32 pt-32 sm:px-8">
+    <div className="site-page px-5 pb-32 pt-6 sm:pt-8 md:pt-32 sm:px-8">
       <div className="mx-auto max-w-5xl">
-        <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-sm font-bold uppercase tracking-widest text-[rgb(var(--forest))] site-eyebrow">Your Tracking</p>
-            <h1 className="mt-2 font-serif text-4xl font-bold sm:text-5xl">Orders</h1>
-          </div>
+        <HeroContentCard
+          className="mb-10 max-w-lg"
+          eyebrow="Your Tracking"
+          title="Orders"
+        >
           <Button variant="secondary" onClick={() => fetchOrders()} className="w-fit">
             <RefreshCw className="mr-2 size-4" /> Refresh
           </Button>
-        </div>
+        </HeroContentCard>
 
         {orders.length === 0 ? (
           <div className="rounded-3xl border bg-[rgb(var(--surface-raised)_/_0.5)] p-10 text-center shadow-sm">
@@ -172,11 +173,11 @@ export default function OrdersPage() {
                                 className={`rounded-lg object-cover ${!item.image_url ? 'opacity-75 mix-blend-luminosity saturate-50' : ''}`} 
                               />
                             </div>
-                            <div className="flex-1">
-                              <p className="font-semibold">{item.name}</p>
-                              <p className="text-sm text-muted-foreground">Qty: {item.quantity}</p>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-semibold line-clamp-2 leading-tight">{item.name}</p>
+                              <p className="text-sm text-muted-foreground mt-1">Qty: {item.quantity}</p>
                             </div>
-                            <p className="font-semibold">₹{item.price * item.quantity}</p>
+                            <p className="font-semibold shrink-0">₹{item.price * item.quantity}</p>
                           </li>
                         ))}
                       </ul>
@@ -184,26 +185,26 @@ export default function OrdersPage() {
 
                     <div className="flex flex-col justify-between rounded-2xl bg-[rgb(var(--surface)_/_0.5)] p-4">
                       <div className="space-y-2 text-sm">
-                        <p className="flex justify-between"><span className="text-muted-foreground">Type:</span> <span className="font-semibold uppercase">{order.order_type}</span></p>
-                        <p className="flex justify-between"><span className="text-muted-foreground">Timing:</span> <span className="font-semibold">{order.scheduled_time}</span></p>
-                        <p className="flex justify-between"><span className="text-muted-foreground">Payment:</span> <span className="font-semibold uppercase">{order.payment_mode}</span></p>
+                        <p className="flex justify-between gap-4"><span className="text-muted-foreground shrink-0">Type:</span> <span className="font-semibold uppercase text-right">{order.order_type}</span></p>
+                        <p className="flex justify-between gap-4"><span className="text-muted-foreground shrink-0">Timing:</span> <span className="font-semibold text-right">{order.scheduled_time}</span></p>
+                        <p className="flex justify-between gap-4"><span className="text-muted-foreground shrink-0">Payment:</span> <span className="font-semibold uppercase text-right">{order.payment_mode}</span></p>
                         {order.order_type === "delivery" && (
-                          <p className="flex justify-between"><span className="text-muted-foreground">Address:</span> <span className="font-semibold text-right max-w-[200px] truncate">{order.delivery_address}</span></p>
+                          <p className="flex justify-between gap-4"><span className="text-muted-foreground shrink-0">Address:</span> <span className="font-semibold text-right line-clamp-2 break-all">{order.delivery_address}</span></p>
                         )}
-                        <p className="flex justify-between pt-2 border-t text-lg font-bold"><span className="text-muted-foreground">Total:</span> <span className="text-[rgb(var(--forest))]">₹{order.total_amount}</span></p>
+                        <p className="flex justify-between gap-4 pt-3 mt-1 border-t border-[rgb(var(--border-soft))] text-lg font-bold"><span className="text-muted-foreground shrink-0">Total:</span> <span className="text-[rgb(var(--forest))] shrink-0">₹{order.total_amount}</span></p>
                       </div>
 
                       <div className="mt-4 flex flex-wrap gap-2">
                         {order.status === "pending" && (
-                          <Button variant="secondary" size="sm" onClick={() => handleCancel(order.id)}>
-                            <XCircle className="mr-2 size-4" /> Cancel Order
+                          <Button variant="secondary" onClick={() => handleCancel(order.id)} className="flex-1 min-w-[120px] h-11">
+                            <XCircle className="mr-2 size-4 shrink-0" /> Cancel Order
                           </Button>
                         )}
-                        <Button variant="secondary" size="sm" onClick={() => handleReorder(order.id)}>
-                          <RefreshCw className="mr-2 size-4" /> Reorder
+                        <Button variant="secondary" onClick={() => handleReorder(order.id)} className="flex-1 min-w-[120px] h-11">
+                          <RefreshCw className="mr-2 size-4 shrink-0" /> Reorder
                         </Button>
-                        <Button variant="secondary" size="sm" onClick={() => handlePrintReceipt(order.id)}>
-                          <FileText className="mr-2 size-4" /> Receipt
+                        <Button variant="secondary" onClick={() => handlePrintReceipt(order.id)} className="flex-1 min-w-[120px] h-11">
+                          <FileText className="mr-2 size-4 shrink-0" /> Receipt
                         </Button>
                       </div>
                     </div>

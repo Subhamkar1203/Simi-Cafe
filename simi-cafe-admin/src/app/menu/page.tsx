@@ -41,7 +41,6 @@ const emptyForm = {
   description: "",
   price: "",
   image_url: "",
-  image_url: "",
   category_id: "",
   diet_type_id: "",
   is_available: true,

@@ -47,7 +47,7 @@ export function ParallaxHero() {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-[100svh] overflow-hidden bg-black"
+      className="relative min-h-[100dvh] overflow-hidden bg-black"
     >
       {/* 1. Deepest Background Layer (Sky/Atmosphere) */}
       <motion.div
@@ -71,7 +71,7 @@ export function ParallaxHero() {
       <div className="absolute inset-0 shadow-[inset_0_0_120px_rgba(0,0,0,0.15)] pointer-events-none" />
 
       {/* Main Content */}
-      <div className="relative z-20 mx-auto flex min-h-[100svh] max-w-7xl flex-col items-center justify-center px-5 text-center text-[#fff8ee] sm:px-8">
+      <div className="relative z-20 mx-auto flex min-h-[100dvh] max-w-7xl flex-col items-center justify-center px-5 text-center text-[#fff8ee] sm:px-8">
         <motion.div 
           className="relative flex flex-col items-center max-w-4xl will-change-transform px-4 py-8"
           style={{ y: textY, opacity }}
@@ -96,7 +96,7 @@ export function ParallaxHero() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1.2, delay: 0.2, ease: [0.2, 0.65, 0.3, 0.9] }}
-            className="font-serif text-5xl md:text-6xl lg:text-[5rem] font-semibold leading-[1.1] drop-shadow-[0_4px_32px_rgba(0,0,0,0.8)]"
+            className="font-serif text-[length:var(--fs-hero)] font-semibold leading-[1.1] drop-shadow-[0_4px_32px_rgba(0,0,0,0.8)]"
           >
             A cup of magic, <br/>
             <span className="italic text-[rgb(var(--accent))] mix-blend-screen opacity-95 font-medium block mt-3 drop-shadow-[0_4px_16px_rgba(232,168,56,0.3)]">a world of warmth.</span>
@@ -106,7 +106,7 @@ export function ParallaxHero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
-            className="mt-8 max-w-2xl text-base leading-relaxed text-[#fff8ee]/90 md:text-lg font-medium drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]"
+            className="mt-8 max-w-2xl text-[length:var(--fs-body)] leading-relaxed text-[#fff8ee]/90 font-medium drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)] px-2 sm:px-0"
           >
             Step into a storybook corner. Soft mornings, glowing evenings, and charms earned one visit at a time.
           </motion.p>
@@ -115,15 +115,15 @@ export function ParallaxHero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.8, ease: "easeOut" }}
-            className="mt-12 flex flex-col sm:flex-row items-center gap-4 sm:gap-5"
+            className="mt-10 sm:mt-12 flex w-full sm:w-auto flex-col sm:flex-row items-center gap-4 sm:gap-5 px-4 sm:px-0"
           >
             {/* Primary CTA */}
-            <Button asChild size="lg" className="rounded-full px-8 h-14 text-[15px] font-bold shadow-[0_0_40px_rgba(var(--accent)_/_0.3)] hover:shadow-[0_0_60px_rgba(var(--accent)_/_0.5)] hover:-translate-y-1 transition-all duration-300">
+            <Button asChild size="lg" className="w-full sm:w-auto rounded-full px-8 h-14 text-[15px] font-bold shadow-[0_0_40px_rgba(var(--accent)_/_0.3)] hover:shadow-[0_0_60px_rgba(var(--accent)_/_0.5)] hover:-translate-y-1 transition-all duration-300">
               <Link href="/reserve"><CalendarDays className="mr-2 size-5" /> Reserve Your Spot</Link>
             </Button>
             
             {/* Secondary CTA */}
-            <Button asChild size="lg" variant="secondary" className="rounded-full px-8 h-14 bg-black/40 backdrop-blur-md border-[#fff8ee]/20 text-[#fff8ee] hover:bg-black/60 hover:text-[#fff8ee] shadow-[0_0_20px_rgba(0,0,0,0.5)] font-bold tracking-wide transition-all duration-300">
+            <Button asChild size="lg" variant="secondary" className="w-full sm:w-auto rounded-full px-8 h-14 bg-black/40 backdrop-blur-md border-[#fff8ee]/20 text-[#fff8ee] hover:bg-black/60 hover:text-[#fff8ee] shadow-[0_0_20px_rgba(0,0,0,0.5)] font-bold tracking-wide transition-all duration-300">
               <Link href="/menu"><Utensils className="mr-2 size-4" /> Explore Menu</Link>
             </Button>
           </motion.div>

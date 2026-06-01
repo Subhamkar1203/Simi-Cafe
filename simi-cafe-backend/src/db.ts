@@ -72,7 +72,32 @@ export async function initDb(): Promise<void> {
       )
     `);
     console.log("Database initialized: otps table exists.");
+
+    try {
+      await execute("ALTER TABLE users ADD COLUMN profile_image VARCHAR(255) DEFAULT '/images/Defaultpp.png'");
+      console.log("Added profile_image column to users table.");
+    } catch {
+      // Column likely already exists
+    }
   } catch (error) {
     console.error("Database initialization failed:", error);
+  }
+
+  // Admin password migration: if any admin has a plain text password, hash it.
+  try {
+    const bcrypt = await import("bcryptjs");
+    const [adminsWithPlain] = await pool.query<RowDataPacket[]>("SELECT id, password_hash FROM admins WHERE password_hash NOT LIKE '$2%'");
+    
+    if (adminsWithPlain.length > 0) {
+      console.log(`[MIGRATION] Found ${adminsWithPlain.length} admin accounts with plain-text passwords. Migrating to bcrypt...`);
+      for (const admin of adminsWithPlain) {
+         const hash = await bcrypt.hash(admin.password_hash, 12);
+         await pool.execute("UPDATE admins SET password_hash = ? WHERE id = ?", [hash, admin.id]);
+      }
+      console.log("[MIGRATION] Admin password migration complete.");
+    }
+  } catch (error) {
+    // If admins table doesn't exist or other error, ignore gracefully
+    console.log("[MIGRATION] Skipped admin password migration (table might not exist yet).");
   }
 }
