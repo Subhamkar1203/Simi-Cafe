@@ -1,5 +1,6 @@
-const mysql = require('mysql2/promise');
-require('dotenv').config({ path: '../simi-cafe-backend/.env' });
+import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
+dotenv.config({ path: '../simi-cafe-backend/.env' });
 async function sync() {
   const c = await mysql.createConnection({host: process.env.DB_HOST || '127.0.0.1', user: process.env.DB_USER || 'root', password: process.env.DB_PASSWORD, database: process.env.DB_NAME || 'simi_cafe'});
   await c.query("UPDATE orders SET payment_confirmed = 1 WHERE status = 'paid' OR status = 'completed'");

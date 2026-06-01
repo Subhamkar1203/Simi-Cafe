@@ -41,8 +41,8 @@ export async function POST(request: Request) {
 
     // Write file
     await fs.writeFile(path.join(adminUploadsDir, filename), buffer);
-    try { await fs.writeFile(path.join(mainUploadsDir, filename), buffer); } catch (e) {}
-    try { await fs.writeFile(path.join(backendUploadsDir, filename), buffer); } catch (e) {}
+    try { await fs.writeFile(path.join(mainUploadsDir, filename), buffer); } catch {}
+    try { await fs.writeFile(path.join(backendUploadsDir, filename), buffer); } catch {}
 
     return NextResponse.json({ 
       success: true, 

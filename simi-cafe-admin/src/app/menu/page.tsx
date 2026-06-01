@@ -137,7 +137,7 @@ export default function MenuPage() {
           setUploading(false);
           return;
         }
-      } catch (err) {
+      } catch {
         toaster.create({ title: "Upload Error", description: "An error occurred during upload", type: "error" });
         setUploading(false);
         return;
@@ -187,7 +187,7 @@ export default function MenuPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-    } catch (e) {
+    } catch {
       toaster.create({ title: "Network Error", description: "Failed to connect to the server.", type: "error" });
       setUploading(false);
       return;
@@ -207,11 +207,11 @@ export default function MenuPage() {
       try {
         const errorData = await res.json();
         if (errorData.details && errorData.details.length > 0) {
-          errorMessage = errorData.details.map((d: any) => `${d.path}: ${d.message}`).join(", ");
+          errorMessage = errorData.details.map((d: { path: string; message: string }) => `${d.path}: ${d.message}`).join(", ");
         } else if (errorData.error) {
           errorMessage = errorData.error;
         }
-      } catch (e) {}
+      } catch {}
       toaster.create({ title: "Validation Error", description: errorMessage, type: "error" });
     }
   };
@@ -237,7 +237,7 @@ export default function MenuPage() {
       } else {
         toaster.create({ title: "Error", description: "Failed to create category", type: "error" });
       }
-    } catch (e) {
+    } catch {
       toaster.create({ title: "Error", description: "Error creating category", type: "error" });
     }
     setUploading(false);
@@ -263,7 +263,7 @@ export default function MenuPage() {
       } else {
         toaster.create({ title: "Error", description: "Failed to create dietary type", type: "error" });
       }
-    } catch (e) {
+    } catch {
       toaster.create({ title: "Error", description: "Error creating dietary type", type: "error" });
     }
     setUploading(false);
@@ -289,7 +289,7 @@ export default function MenuPage() {
       } else {
         toaster.create({ title: "Error", description: "Failed to create tag", type: "error" });
       }
-    } catch (e) {
+    } catch {
       toaster.create({ title: "Error", description: "Error creating tag", type: "error" });
     }
     setUploading(false);

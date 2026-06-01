@@ -1,5 +1,6 @@
-const mysql = require('mysql2/promise');
-require('dotenv').config({ path: '../simi-cafe-backend/.env' }); // or use local .env if available
+import mysql from 'mysql2/promise';
+import dotenv from 'dotenv';
+dotenv.config({ path: '../simi-cafe-backend/.env' }); // or use local .env if available
 // Assuming standard env vars
 async function runMigration() {
   const connection = await mysql.createConnection({

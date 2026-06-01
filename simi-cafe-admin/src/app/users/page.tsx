@@ -56,7 +56,7 @@ export default function UsersPage() {
         const data = await res.json();
         alert(data.error || "Failed to redeem");
       }
-    } catch (e) {
+    } catch {
       alert("Error redeeming charm");
     }
     setRedeemingId(null);
