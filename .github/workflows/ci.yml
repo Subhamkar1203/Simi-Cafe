@@ -1,0 +1,86 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  validate-frontend:
+    name: Validate Client Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./simi-cafe
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './simi-cafe/package-lock.json'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+
+  validate-admin:
+    name: Validate Admin Frontend
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./simi-cafe-admin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './simi-cafe-admin/package-lock.json'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
+
+  validate-backend:
+    name: Validate Backend API
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./simi-cafe-backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './simi-cafe-backend/package-lock.json'
+      - run: npm ci
+      - run: npm run build
+
+  deploy-production:
+    name: Deploy to Production
+    needs: [validate-frontend, validate-admin, validate-backend]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - name: Deploy Client Frontend to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_FRONTEND }}
+          working-directory: ./simi-cafe
+          vercel-args: '--prod'
+
+      - name: Deploy Admin Portal to Vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_ADMIN }}
+          working-directory: ./simi-cafe-admin
+          vercel-args: '--prod'
+
+      - name: Deploy Backend API (Placeholder)
+        run: echo "Deploying Backend API... (Awaiting Backend Host choice)"
+        # TODO: Add SSH/Docker/Render deploy steps here

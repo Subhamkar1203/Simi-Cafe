@@ -1,0 +1,80 @@
+import { Router } from "express";
+import { query } from "../../db";
+import { verifyAdminPassword, createAdminSession, clearAdminSession, requireAdminAuth } from "../../utils/admin-auth";
+import type { RowDataPacket } from "mysql2/promise";
+import bcrypt from "bcryptjs";
+
+const router = Router();
+
+interface AdminRow extends RowDataPacket {
+  id: number;
+  name: string;
+  email: string;
+  password_hash: string;
+  role: string;
+}
+
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ error: "Email and password required" });
+    }
+
+    const admins = await query<AdminRow[]>(
+      "SELECT id, name, email, password_hash, role FROM admins WHERE email = ?",
+      [email]
+    );
+
+    if (admins.length === 0) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    const admin = admins[0];
+
+    // For development: allow plain text match OR bcrypt match
+    const isValidPassword =
+      admin.password_hash === password ||
+      (await bcrypt.compare(password, admin.password_hash).catch(() => false));
+
+    if (!isValidPassword) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    await createAdminSession(res, admin.id, admin.role);
+
+    res.json({ success: true, admin: { name: admin.name, role: admin.role } });
+  } catch (error) {
+    console.error("Login error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.post("/logout", (req, res) => {
+  clearAdminSession(res);
+  res.json({ success: true });
+});
+
+router.get("/me", requireAdminAuth, async (req, res) => {
+  try {
+    const adminId = (req as any).admin.adminId;
+
+    const admins = await query<AdminRow[]>(
+      "SELECT id, name, email, role FROM admins WHERE id = ?",
+      [adminId]
+    );
+
+    if (admins.length === 0) {
+      return res.status(404).json({ error: "Admin not found" });
+    }
+
+    const admin = admins[0];
+    res.json({ success: true, admin: { name: admin.name, role: admin.role, email: admin.email } });
+  } catch (error) {
+    console.error("Me error:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+export default router;
