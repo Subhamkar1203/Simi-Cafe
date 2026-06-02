@@ -10,6 +10,9 @@ jobs:
   validate-frontend:
     name: Validate Client Frontend
     runs-on: ubuntu-latest
+
+    env:
+      NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
     defaults:
       run:
         working-directory: ./simi-cafe
@@ -28,6 +31,9 @@ jobs:
   validate-admin:
     name: Validate Admin Frontend
     runs-on: ubuntu-latest
+
+    env:
+      NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
     defaults:
       run:
         working-directory: ./simi-cafe-admin
