@@ -4,7 +4,6 @@ import { useEffect, useState, FormEvent } from "react";
 import { PlusLg, PencilSquare, Trash, XLg } from "react-bootstrap-icons";
 import { Pagination } from "@/components/pagination";
 import { toaster } from "@/components/toaster";
-import Image from "next/image";
 interface MenuItem {
   id: number;
   category_id: number;
@@ -402,7 +401,7 @@ export default function MenuPage() {
                 <label>Image</label>
                 {form.image_url && !selectedFile && (
                   <div style={{ marginBottom: "0.5rem" }}>
-                    <Image
+                    <img
                       src={form.image_url}
                       alt="Current"
                       width={60}
@@ -541,7 +540,7 @@ export default function MenuPage() {
                 <tr key={item.id}>
                   <td data-label="Name" style={{ fontWeight: 500, display: "flex", alignItems: "center", gap: "0.75rem" }}>
                     {item.image_url ? (
-                      <Image
+                      <img
                         src={item.image_url}
                         alt={item.name}
                         width={40}
