@@ -15,14 +15,14 @@ export default async function AccountPage() {
   let initialReservations = [];
 
   try {
-    const res = await fetch("http://localhost:9092/api/client/reservations/user", {
+    const res = await fetch("process.env.NEXT_PUBLIC_API_URL/api/client/reservations/user", {
       headers: {
         Cookie: cookieString
       },
       // Since it's user-specific, do not cache
       cache: "no-store"
     });
-    
+
     if (res.ok) {
       const data = await res.json();
       if (data.reservations) {

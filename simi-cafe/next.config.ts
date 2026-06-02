@@ -14,11 +14,11 @@ const nextConfig: NextConfig = {
     return [
       {
         source: '/api/admin/:path*',
-        destination: 'http://localhost:9092/api/admin/:path*', // Proxy to backend
+        destination: 'process.env.NEXT_PUBLIC_API_URL/api/admin/:path*', // Proxy to backend
       },
       {
         source: '/api/:path*',
-        destination: 'http://localhost:9092/api/client/:path*', // Proxy to backend
+        destination: 'process.env.NEXT_PUBLIC_API_URL/api/client/:path*', // Proxy to backend
       }
     ];
   },

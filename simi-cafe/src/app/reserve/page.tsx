@@ -20,10 +20,10 @@ export default async function ReservePage() {
   let timeSlots = DEFAULT_TIME_SLOTS;
 
   try {
-    const res = await fetch("http://localhost:9092/api/client/reservations/availability", {
-      next: { revalidate: 60 } 
+    const res = await fetch("process.env.NEXT_PUBLIC_API_URL/api/client/reservations/availability", {
+      next: { revalidate: 60 }
     });
-    
+
     if (res.ok) {
       const data = await res.json();
       if (data.timeSlots && Array.isArray(data.timeSlots)) {
