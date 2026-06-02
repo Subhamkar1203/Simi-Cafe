@@ -68,7 +68,7 @@ export async function initDb(): Promise<void> {
         identifier VARCHAR(255) NOT NULL,
         otp VARCHAR(10) NOT NULL,
         expires_at DATETIME NOT NULL,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
     console.log("Database initialized: otps table exists.");
@@ -87,12 +87,12 @@ export async function initDb(): Promise<void> {
   try {
     const bcrypt = await import("bcryptjs");
     const [adminsWithPlain] = await pool.query<RowDataPacket[]>("SELECT id, password_hash FROM admins WHERE password_hash NOT LIKE '$2%'");
-    
+
     if (adminsWithPlain.length > 0) {
       console.log(`[MIGRATION] Found ${adminsWithPlain.length} admin accounts with plain-text passwords. Migrating to bcrypt...`);
       for (const admin of adminsWithPlain) {
-         const hash = await bcrypt.hash(admin.password_hash, 12);
-         await pool.execute("UPDATE admins SET password_hash = ? WHERE id = ?", [hash, admin.id]);
+        const hash = await bcrypt.hash(admin.password_hash, 12);
+        await pool.execute("UPDATE admins SET password_hash = ? WHERE id = ?", [hash, admin.id]);
       }
       console.log("[MIGRATION] Admin password migration complete.");
     }
