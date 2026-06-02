@@ -15,7 +15,7 @@ export default async function AccountPage() {
   let initialReservations = [];
 
   try {
-    const res = await fetch("process.env.NEXT_PUBLIC_API_URL/api/client/reservations/user", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/client/reservations/user`, {
       headers: {
         Cookie: cookieString
       },

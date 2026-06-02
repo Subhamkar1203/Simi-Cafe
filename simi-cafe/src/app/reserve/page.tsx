@@ -20,7 +20,7 @@ export default async function ReservePage() {
   let timeSlots = DEFAULT_TIME_SLOTS;
 
   try {
-    const res = await fetch("process.env.NEXT_PUBLIC_API_URL/api/client/reservations/availability", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/client/reservations/availability`, {
       next: { revalidate: 60 }
     });
 
