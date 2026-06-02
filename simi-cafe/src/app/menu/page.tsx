@@ -10,7 +10,7 @@ export default async function MenuPage() {
   let menuData = { items: [], dietTypes: [] };
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/client/menu", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/client/menu`, {
       next: { revalidate: 60 } // Revalidate every 60 seconds, or adjust as needed
     });
     if (res.ok) {
