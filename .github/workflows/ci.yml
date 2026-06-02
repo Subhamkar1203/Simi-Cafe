@@ -1,91 +1,85 @@
 name: CI/CD Pipeline
 
 on:
-push:
-branches: [main, master]
-pull_request:
-branches: [main, master]
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
 
 jobs:
-validate-frontend:
-name: Validate Client Frontend
-runs-on: ubuntu-latest
+  validate-frontend:
+    name: Validate Client Frontend
+    runs-on: ubuntu-latest
 
-```
-env:
-  NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+    env:
+      NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
-defaults:
-  run:
-    working-directory: ./simi-cafe
+    defaults:
+      run:
+        working-directory: ./simi-cafe
 
-steps:
-  - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-  - uses: actions/setup-node@v4
-    with:
-      node-version: "20"
-      cache: npm
-      cache-dependency-path: ./simi-cafe/package-lock.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: ./simi-cafe/package-lock.json
 
-  - name: Install dependencies
-    run: |
-      npm ci --no-audit || npm ci --no-audit
+      - name: Install dependencies
+        run: |
+          npm ci --no-audit || npm ci --no-audit
 
-  - run: npm run lint
-  - run: npm run build
-```
+      - run: npm run lint
+      - run: npm run build
 
-validate-admin:
-name: Validate Admin Frontend
-runs-on: ubuntu-latest
+  validate-admin:
+    name: Validate Admin Frontend
+    runs-on: ubuntu-latest
 
-```
-env:
-  NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+    env:
+      NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
 
-defaults:
-  run:
-    working-directory: ./simi-cafe-admin
+    defaults:
+      run:
+        working-directory: ./simi-cafe-admin
 
-steps:
-  - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-  - uses: actions/setup-node@v4
-    with:
-      node-version: "20"
-      cache: npm
-      cache-dependency-path: ./simi-cafe-admin/package-lock.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: ./simi-cafe-admin/package-lock.json
 
-  - name: Install dependencies
-    run: |
-      npm ci --no-audit || npm ci --no-audit
+      - name: Install dependencies
+        run: |
+          npm ci --no-audit || npm ci --no-audit
 
-  - run: npm run lint
-  - run: npm run build
-```
+      - run: npm run lint
+      - run: npm run build
 
-validate-backend:
-name: Validate Backend API
-runs-on: ubuntu-latest
+  validate-backend:
+    name: Validate Backend API
+    runs-on: ubuntu-latest
 
-```
-defaults:
-  run:
-    working-directory: ./simi-cafe-backend
+    defaults:
+      run:
+        working-directory: ./simi-cafe-backend
 
-steps:
-  - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-  - uses: actions/setup-node@v4
-    with:
-      node-version: "20"
-      cache: npm
-      cache-dependency-path: ./simi-cafe-backend/package-lock.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: ./simi-cafe-backend/package-lock.json
 
-  - name: Install dependencies
-    run: |
-      npm ci --no-audit || npm ci --no-audit
+      - name: Install dependencies
+        run: |
+          npm ci --no-audit || npm ci --no-audit
 
-  - run: npm run build
-```
+      - run: npm run build
