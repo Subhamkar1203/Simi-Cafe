@@ -11,6 +11,7 @@
   "dependencies": {
     "@ark-ui/react": "^5.37.0",
     "bcryptjs": "^3.0.3",
+    "cloudinary": "^2.10.0",
     "jose": "^6.2.3",
     "mysql2": "^3.22.4",
     "next": "16.2.6",
